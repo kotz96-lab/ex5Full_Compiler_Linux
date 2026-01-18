@@ -273,10 +273,46 @@ System.err.println("DEBUG: Offset = " + offset);
 
 ## 🎓 Architecture Insights
 
+### Critical Architecture Overview
+
+**Three-Person Team Structure:**
+- **Person A (IR Generation):** AST → Intermediate Representation (IR commands)
+  - Located in: `ex5/src/ast/`, `ex5/src/ir/`
+  - Generates IR commands like `IrCommandStore`, `IrCommandFieldStore`, `IrCommandBinopEqIntegers`
+
+- **Person B (Register Allocation):** Assigns temporaries to MIPS registers
+  - Located in: `ex5/src/regalloc/` (if exists) or within compilation pipeline
+  - Uses liveness analysis and graph coloring
+  - **BUG POTENTIAL:** May allocate null temps incorrectly (fixed with `getReg()` helper)
+
+- **Person C (MIPS Generation):** IR commands → MIPS assembly
+  - Located in: `ex5/src/mips/`
+  - `MipsTranslator.java` - Main translation logic
+  - `MipsGenerator.java` - Assembly output generation
+  - `StringTable.java` - String constant management
+
+**Compilation Pipeline:**
+```
+Source Code (.txt)
+    ↓
+Lexer/Parser → AST
+    ↓ [Person A]
+Semantic Analysis → Type Checking
+    ↓
+IR Generation → IR Commands
+    ↓ [Person B]
+Register Allocation → Temp → Register mapping
+    ↓ [Person C]
+MIPS Generation → Assembly (.s)
+    ↓
+SPIM → Execution
+```
+
 ### Current Limitations
 
-**1. No Stack-Based Locals**
+**1. No Stack-Based Locals (CRITICAL LIMITATION)**
 - All variables (including function parameters and locals) are allocated as globals in `.data`
+- Variable names include offset: `variable_<offset>` (e.g., `l1_8`, `p_10`)
 - This breaks recursion and nested function calls
 - Affects: TEST_01, TEST_02, TEST_03, TEST_10, TEST_12, etc.
 
@@ -390,5 +426,70 @@ git push origin master
 
 ---
 
+## 💡 Tips for Next Session
+
+### Start Here
+1. Read this entire document first
+2. Check current status: `cd /home/student/comp/ex5/self-check-ex5 && python3 self-check.py 2>&1 | grep -E "OK$|Total|Passed"`
+3. Pick a failing test from the priority list
+4. Work in `/home/student/comp/ex5/` (never in `self-check-ex5/ex5/`)
+
+### When You Fix Something
+1. Test manually first: `java -jar COMPILER test.txt /tmp/out.s && spim -file /tmp/out.s`
+2. Rebuild: `make`
+3. Update zip: `cd /home/student/comp && rm 123456789.zip && cd ex5 && zip -r ../123456789.zip . -x "*.git/*" "self-check-ex5/*"`
+4. Run self-check: `cd self-check-ex5 && python3 self-check.py`
+5. Commit & push when test passes
+
+### Common Pitfalls to Avoid
+- ❌ Don't edit files in `self-check-ex5/ex5/` - they get overwritten from zip
+- ❌ Don't forget to update the zip after fixes
+- ❌ Don't use `$at` register - use `$t8` or `$t9`
+- ❌ Don't call `semantMe()` during IR generation - cache info during semantic phase
+- ❌ Don't assume register allocation handles null - always check with `getReg()` helper
+
+### Quick Wins to Try
+1. **TEST_05 (Classes)** - May just need minor fixes since basic classes work
+2. **TEST_20, TEST_21** - Non-timeout failures, check what's wrong
+3. **TEST_08, TEST_09** - Access violation tests, might just need error labels
+
+### What NOT to Attempt (Unless You Have Time for Major Work)
+- Stack-based locals (needed for recursion) - requires rewriting memory allocation
+- Virtual method dispatch - requires vtable implementation
+- Complex OOP features - requires major architecture changes
+
+---
+
+## 📞 Key Contacts & Resources
+
+**GitHub Repository:** `git@github.com:kotz96-lab/ex5Full_Compiler_Linux.git`
+
+**Critical Files Modified:**
+1. `ex5/src/mips/MipsTranslator.java` - Most bug fixes here
+2. `ex5/src/ast/AstVarField.java` - Field offset caching
+3. `ex5/src/ast/AstStmtAssign.java` - Assignment handling
+4. `ex5/src/ast/AstSimpleExpString.java` - String processing
+5. `ex5/src/symboltable/SymbolTable.java` - PrintString parameter
+
+**Git Commands:**
+```bash
+git add -A
+git commit -m "Fix TEST_XX: description"
+git push origin master
+```
+
+**Self-Check Pattern:**
+```bash
+# After every fix:
+cd /home/student/comp
+rm 123456789.zip
+cd ex5 && zip -r ../123456789.zip . -x "*.git/*" "self-check-ex5/*"
+cd self-check-ex5
+python3 self-check.py 2>&1 | grep -E "OK$|Total|Passed"
+```
+
+---
+
 *Generated after achieving 8/26 tests passing (30.8%)*
 *Session focused on TEST_06 (Strings) - Successfully fixed!*
+*Good luck reaching 13/26! 🚀*
