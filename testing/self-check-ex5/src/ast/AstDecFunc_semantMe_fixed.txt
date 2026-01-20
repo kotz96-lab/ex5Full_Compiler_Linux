@@ -1,0 +1,75 @@
+	public void semantMe() throws SemanticException
+	{
+		Type t;
+		Type returnTypeFromTable;
+		TypeList type_list = null;
+
+		/*******************/
+		/* [0] return type */
+		/*******************/
+        returnTypeFromTable = SymbolTable.getInstance().find(returnType.name);
+		if (returnTypeFromTable == null)
+		{
+            if (returnType.name.equals("void")) {
+                returnTypeFromTable = TypeVoid.getInstance();
+            }
+            else {
+                throw new SemanticException(String.format("non existing return type %s", returnType.name));
+            }
+		}
+
+		/*****************************************/
+		/* [0.5] Build param types for function signature */
+		/*****************************************/
+		for (AstTypeNameList it = params; it != null; it = it.tail)
+		{
+			t = SymbolTable.getInstance().find(it.head.type.name);
+			if (t == null)
+			{
+				throw new SemanticException(String.format("non existing type %s", it.head.type.name));
+			}
+			if (t instanceof TypeVoid)
+			{
+				throw new SemanticException(String.format("parameter %s cannot be of type void", it.head.name));
+			}
+			type_list = new TypeList(t, type_list);
+		}
+
+		/***************************************************/
+		/* [1] Enter the Function Type to the Symbol Table */
+		/* (Do this BEFORE semanting body for recursion)   */
+		/***************************************************/
+		TypeFunction funcType = new TypeFunction(returnTypeFromTable, name, type_list);
+		SymbolTable.getInstance().enter(name, funcType);
+
+		/****************************/
+		/* [2] Begin Function Scope */
+		/****************************/
+		SymbolTable.getInstance().beginScope();
+
+		/***************************/
+		/* [3] Enter Input Params to scope */
+		/***************************/
+		for (AstTypeNameList it = params; it != null; it = it.tail)
+		{
+			t = SymbolTable.getInstance().find(it.head.type.name);
+			SymbolTable.getInstance().enter(it.head.name, t);
+
+			// Store the parameter variable name with offset for IR generation
+			String paramVarName = String.format("%s_%d", it.head.name, it.head.serialNumber);
+			funcType.paramVarNames.add(paramVarName);
+		}
+
+		/*******************/
+		/* [4] Semant Body */
+		/*******************/
+		// Set the expected return type for return statements inside this function
+		AstStmtReturn.expectedReturnType = returnTypeFromTable;
+		body.semantMe();
+		AstStmtReturn.expectedReturnType = null;
+
+		/*****************/
+		/* [5] End Scope */
+		/*****************/
+		SymbolTable.getInstance().endScope();
+	}

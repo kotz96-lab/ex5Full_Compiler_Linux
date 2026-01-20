@@ -1,0 +1,812 @@
+.data
+msg_div_zero: .asciiz "Illegal Division By Zero"
+msg_null_ptr: .asciiz "Invalid Pointer Dereference"
+msg_bounds: .asciiz "Access Violation"
+a4_11: .word 0
+a1_8: .word 0
+b11_36: .word 0
+b13_38: .word 0
+a2_9: .word 0
+a16_23: .word 0
+b1_26: .word 0
+b3_28: .word 0
+b9_34: .word 0
+a10_17: .word 0
+a14_21: .word 0
+a0_7: .word 0
+b17_42: .word 0
+b15_40: .word 0
+a12_19: .word 0
+b8_33: .word 0
+b6_31: .word 0
+a6_13: .word 0
+a8_15: .word 0
+a3_10: .word 0
+b10_35: .word 0
+b12_37: .word 0
+b14_39: .word 0
+a17_24: .word 0
+a15_22: .word 0
+b0_25: .word 0
+b2_27: .word 0
+b4_29: .word 0
+a13_20: .word 0
+b16_41: .word 0
+a11_18: .word 0
+b7_32: .word 0
+b5_30: .word 0
+p_10: .word 0
+a5_12: .word 0
+a7_14: .word 0
+a9_16: .word 0
+
+.text
+.globl main
+
+main:
+    j __user_main    # Jump to main function
+f:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Allocate a17_24
+    # Allocate a17_24
+
+    # Allocate a16_23
+    # Allocate a16_23
+
+    # Allocate a15_22
+    # Allocate a15_22
+
+    # Allocate a14_21
+    # Allocate a14_21
+
+    # Allocate a13_20
+    # Allocate a13_20
+
+    # Allocate a12_19
+    # Allocate a12_19
+
+    # Allocate a11_18
+    # Allocate a11_18
+
+    # Allocate a10_17
+    # Allocate a10_17
+
+    # Allocate a9_16
+    # Allocate a9_16
+
+    # Allocate a8_15
+    # Allocate a8_15
+
+    # Allocate a7_14
+    # Allocate a7_14
+
+    # Allocate a6_13
+    # Allocate a6_13
+
+    # Allocate a5_12
+    # Allocate a5_12
+
+    # Allocate a4_11
+    # Allocate a4_11
+
+    # Allocate a3_10
+    # Allocate a3_10
+
+    # Allocate a2_9
+    # Allocate a2_9
+
+    # Allocate a1_8
+    # Allocate a1_8
+
+    # Allocate a0_7
+    # Allocate a0_7
+
+    # Allocate b0_25
+    # Allocate b0_25
+
+    # Temp_0 := a0_7
+    lw $t0, a0_7
+
+    # b0_25 := Temp_0
+    sw $t0, b0_25
+
+    # Allocate b1_26
+    # Allocate b1_26
+
+    # Temp_1 := a1_8
+    lw $t0, a1_8
+
+    # b1_26 := Temp_1
+    sw $t0, b1_26
+
+    # Allocate b2_27
+    # Allocate b2_27
+
+    # Temp_2 := a2_9
+    lw $t0, a2_9
+
+    # b2_27 := Temp_2
+    sw $t0, b2_27
+
+    # Allocate b3_28
+    # Allocate b3_28
+
+    # Temp_3 := a3_10
+    lw $t0, a3_10
+
+    # b3_28 := Temp_3
+    sw $t0, b3_28
+
+    # Allocate b4_29
+    # Allocate b4_29
+
+    # Temp_4 := a4_11
+    lw $t0, a4_11
+
+    # b4_29 := Temp_4
+    sw $t0, b4_29
+
+    # Allocate b5_30
+    # Allocate b5_30
+
+    # Temp_5 := a5_12
+    lw $t0, a5_12
+
+    # b5_30 := Temp_5
+    sw $t0, b5_30
+
+    # Allocate b6_31
+    # Allocate b6_31
+
+    # Temp_6 := a6_13
+    lw $t0, a6_13
+
+    # b6_31 := Temp_6
+    sw $t0, b6_31
+
+    # Allocate b7_32
+    # Allocate b7_32
+
+    # Temp_7 := a7_14
+    lw $t0, a7_14
+
+    # b7_32 := Temp_7
+    sw $t0, b7_32
+
+    # Allocate b8_33
+    # Allocate b8_33
+
+    # Temp_8 := a8_15
+    lw $t0, a8_15
+
+    # b8_33 := Temp_8
+    sw $t0, b8_33
+
+    # Allocate b9_34
+    # Allocate b9_34
+
+    # Temp_9 := a9_16
+    lw $t0, a9_16
+
+    # b9_34 := Temp_9
+    sw $t0, b9_34
+
+    # Allocate b10_35
+    # Allocate b10_35
+
+    # Temp_10 := a10_17
+    lw $t0, a10_17
+
+    # b10_35 := Temp_10
+    sw $t0, b10_35
+
+    # Allocate b11_36
+    # Allocate b11_36
+
+    # Temp_11 := a11_18
+    lw $t0, a11_18
+
+    # b11_36 := Temp_11
+    sw $t0, b11_36
+
+    # Allocate b12_37
+    # Allocate b12_37
+
+    # Temp_12 := a12_19
+    lw $t0, a12_19
+
+    # b12_37 := Temp_12
+    sw $t0, b12_37
+
+    # Allocate b13_38
+    # Allocate b13_38
+
+    # Temp_13 := a13_20
+    lw $t0, a13_20
+
+    # b13_38 := Temp_13
+    sw $t0, b13_38
+
+    # Allocate b14_39
+    # Allocate b14_39
+
+    # Temp_14 := a14_21
+    lw $t0, a14_21
+
+    # b14_39 := Temp_14
+    sw $t0, b14_39
+
+    # Allocate b15_40
+    # Allocate b15_40
+
+    # Temp_15 := a15_22
+    lw $t0, a15_22
+
+    # b15_40 := Temp_15
+    sw $t0, b15_40
+
+    # Allocate b16_41
+    # Allocate b16_41
+
+    # Temp_16 := a16_23
+    lw $t0, a16_23
+
+    # b16_41 := Temp_16
+    sw $t0, b16_41
+
+    # Allocate b17_42
+    # Allocate b17_42
+
+    # Temp_17 := a17_24
+    lw $t0, a17_24
+
+    # b17_42 := Temp_17
+    sw $t0, b17_42
+
+    # Temp_35 := a0_7
+    lw $t0, a0_7
+
+    # Temp_36 := b1_26
+    lw $t1, b1_26
+
+    # Temp_34 := Temp_35 + Temp_36
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_0
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_1
+    j saturate_add_done_2
+saturate_add_max_0:
+    li $t0, 32767
+    j saturate_add_done_2
+saturate_add_min_1:
+    li $t0, -32768
+saturate_add_done_2:
+
+    # Temp_37 := a2_9
+    lw $t1, a2_9
+
+    # Temp_33 := Temp_34 + Temp_37
+    # Saturated addition
+    add $t1, $t0, $t1
+    li $t9, 32767
+    bgt $t1, $t9, saturate_add_max_3
+    li $t9, -32768
+    blt $t1, $t9, saturate_add_min_4
+    j saturate_add_done_5
+saturate_add_max_3:
+    li $t1, 32767
+    j saturate_add_done_5
+saturate_add_min_4:
+    li $t1, -32768
+saturate_add_done_5:
+
+    # Temp_38 := b3_28
+    lw $t0, b3_28
+
+    # Temp_32 := Temp_33 + Temp_38
+    # Saturated addition
+    add $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_6
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_7
+    j saturate_add_done_8
+saturate_add_max_6:
+    li $t0, 32767
+    j saturate_add_done_8
+saturate_add_min_7:
+    li $t0, -32768
+saturate_add_done_8:
+
+    # Temp_39 := a4_11
+    lw $t1, a4_11
+
+    # Temp_31 := Temp_32 + Temp_39
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_9
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_10
+    j saturate_add_done_11
+saturate_add_max_9:
+    li $t0, 32767
+    j saturate_add_done_11
+saturate_add_min_10:
+    li $t0, -32768
+saturate_add_done_11:
+
+    # Temp_40 := b5_30
+    lw $t1, b5_30
+
+    # Temp_30 := Temp_31 + Temp_40
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_12
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_13
+    j saturate_add_done_14
+saturate_add_max_12:
+    li $t0, 32767
+    j saturate_add_done_14
+saturate_add_min_13:
+    li $t0, -32768
+saturate_add_done_14:
+
+    # Temp_41 := a6_13
+    lw $t1, a6_13
+
+    # Temp_29 := Temp_30 + Temp_41
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_15
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_16
+    j saturate_add_done_17
+saturate_add_max_15:
+    li $t0, 32767
+    j saturate_add_done_17
+saturate_add_min_16:
+    li $t0, -32768
+saturate_add_done_17:
+
+    # Temp_42 := b7_32
+    lw $t1, b7_32
+
+    # Temp_28 := Temp_29 + Temp_42
+    # Saturated addition
+    add $t1, $t0, $t1
+    li $t9, 32767
+    bgt $t1, $t9, saturate_add_max_18
+    li $t9, -32768
+    blt $t1, $t9, saturate_add_min_19
+    j saturate_add_done_20
+saturate_add_max_18:
+    li $t1, 32767
+    j saturate_add_done_20
+saturate_add_min_19:
+    li $t1, -32768
+saturate_add_done_20:
+
+    # Temp_43 := a8_15
+    lw $t0, a8_15
+
+    # Temp_27 := Temp_28 + Temp_43
+    # Saturated addition
+    add $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_21
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_22
+    j saturate_add_done_23
+saturate_add_max_21:
+    li $t0, 32767
+    j saturate_add_done_23
+saturate_add_min_22:
+    li $t0, -32768
+saturate_add_done_23:
+
+    # Temp_44 := b9_34
+    lw $t1, b9_34
+
+    # Temp_26 := Temp_27 + Temp_44
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_24
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_25
+    j saturate_add_done_26
+saturate_add_max_24:
+    li $t0, 32767
+    j saturate_add_done_26
+saturate_add_min_25:
+    li $t0, -32768
+saturate_add_done_26:
+
+    # Temp_45 := a10_17
+    lw $t1, a10_17
+
+    # Temp_25 := Temp_26 + Temp_45
+    # Saturated addition
+    add $t1, $t0, $t1
+    li $t9, 32767
+    bgt $t1, $t9, saturate_add_max_27
+    li $t9, -32768
+    blt $t1, $t9, saturate_add_min_28
+    j saturate_add_done_29
+saturate_add_max_27:
+    li $t1, 32767
+    j saturate_add_done_29
+saturate_add_min_28:
+    li $t1, -32768
+saturate_add_done_29:
+
+    # Temp_46 := b11_36
+    lw $t0, b11_36
+
+    # Temp_24 := Temp_25 + Temp_46
+    # Saturated addition
+    add $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_30
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_31
+    j saturate_add_done_32
+saturate_add_max_30:
+    li $t0, 32767
+    j saturate_add_done_32
+saturate_add_min_31:
+    li $t0, -32768
+saturate_add_done_32:
+
+    # Temp_47 := a12_19
+    lw $t1, a12_19
+
+    # Temp_23 := Temp_24 + Temp_47
+    # Saturated addition
+    add $t1, $t0, $t1
+    li $t9, 32767
+    bgt $t1, $t9, saturate_add_max_33
+    li $t9, -32768
+    blt $t1, $t9, saturate_add_min_34
+    j saturate_add_done_35
+saturate_add_max_33:
+    li $t1, 32767
+    j saturate_add_done_35
+saturate_add_min_34:
+    li $t1, -32768
+saturate_add_done_35:
+
+    # Temp_48 := b13_38
+    lw $t0, b13_38
+
+    # Temp_22 := Temp_23 + Temp_48
+    # Saturated addition
+    add $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_36
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_37
+    j saturate_add_done_38
+saturate_add_max_36:
+    li $t0, 32767
+    j saturate_add_done_38
+saturate_add_min_37:
+    li $t0, -32768
+saturate_add_done_38:
+
+    # Temp_49 := a14_21
+    lw $t1, a14_21
+
+    # Temp_21 := Temp_22 + Temp_49
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_39
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_40
+    j saturate_add_done_41
+saturate_add_max_39:
+    li $t0, 32767
+    j saturate_add_done_41
+saturate_add_min_40:
+    li $t0, -32768
+saturate_add_done_41:
+
+    # Temp_50 := b15_40
+    lw $t1, b15_40
+
+    # Temp_20 := Temp_21 + Temp_50
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_42
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_43
+    j saturate_add_done_44
+saturate_add_max_42:
+    li $t0, 32767
+    j saturate_add_done_44
+saturate_add_min_43:
+    li $t0, -32768
+saturate_add_done_44:
+
+    # Temp_51 := a16_23
+    lw $t1, a16_23
+
+    # Temp_19 := Temp_20 + Temp_51
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_45
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_46
+    j saturate_add_done_47
+saturate_add_max_45:
+    li $t0, 32767
+    j saturate_add_done_47
+saturate_add_min_46:
+    li $t0, -32768
+saturate_add_done_47:
+
+    # Temp_52 := b17_42
+    lw $t1, b17_42
+
+    # Temp_18 := Temp_19 + Temp_52
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_48
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_49
+    j saturate_add_done_50
+saturate_add_max_48:
+    li $t0, 32767
+    j saturate_add_done_50
+saturate_add_min_49:
+    li $t0, -32768
+saturate_add_done_50:
+
+    # RETURN Temp_18
+    move $v0, $t0    # return value
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+__user_main:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Temp_53 := 1
+    li $t0, 1
+
+    # a17_24 := Temp_53
+    sw $t0, a17_24
+
+    # Temp_54 := 2
+    li $t0, 2
+
+    # a16_23 := Temp_54
+    sw $t0, a16_23
+
+    # Temp_55 := 3
+    li $t0, 3
+
+    # a15_22 := Temp_55
+    sw $t0, a15_22
+
+    # Temp_56 := 4
+    li $t0, 4
+
+    # a14_21 := Temp_56
+    sw $t0, a14_21
+
+    # Temp_57 := 5
+    li $t0, 5
+
+    # a13_20 := Temp_57
+    sw $t0, a13_20
+
+    # Temp_58 := 6
+    li $t0, 6
+
+    # a12_19 := Temp_58
+    sw $t0, a12_19
+
+    # Temp_59 := 7
+    li $t0, 7
+
+    # a11_18 := Temp_59
+    sw $t0, a11_18
+
+    # Temp_60 := 8
+    li $t0, 8
+
+    # a10_17 := Temp_60
+    sw $t0, a10_17
+
+    # Temp_61 := 9
+    li $t0, 9
+
+    # a9_16 := Temp_61
+    sw $t0, a9_16
+
+    # Temp_62 := 8
+    li $t0, 8
+
+    # a8_15 := Temp_62
+    sw $t0, a8_15
+
+    # Temp_63 := 7
+    li $t0, 7
+
+    # a7_14 := Temp_63
+    sw $t0, a7_14
+
+    # Temp_64 := 6
+    li $t0, 6
+
+    # a6_13 := Temp_64
+    sw $t0, a6_13
+
+    # Temp_65 := 5
+    li $t0, 5
+
+    # a5_12 := Temp_65
+    sw $t0, a5_12
+
+    # Temp_66 := 4
+    li $t0, 4
+
+    # a4_11 := Temp_66
+    sw $t0, a4_11
+
+    # Temp_67 := 3
+    li $t0, 3
+
+    # a3_10 := Temp_67
+    sw $t0, a3_10
+
+    # Temp_68 := 2
+    li $t0, 2
+
+    # a2_9 := Temp_68
+    sw $t0, a2_9
+
+    # Temp_69 := 1
+    li $t0, 1
+
+    # a1_8 := Temp_69
+    sw $t0, a1_8
+
+    # Temp_70 := 0
+    li $t0, 0
+
+    # a0_7 := Temp_70
+    # Save a0_7 before store (recursive call ahead)
+    addi $sp, $sp, -4    # allocate space
+    lw $t8, a0_7    # load current value
+    sw $t8, 0($sp)    # save on stack
+    sw $t0, a0_7
+
+    # Temp_71 := f()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal f
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+    # Restore a0_7 after call (from pre-store save)
+    lw $t8, 0($sp)    # load saved value
+    sw $t8, a0_7    # restore global
+    addi $sp, $sp, 4    # deallocate global save space
+
+    # p_10 := Temp_71
+    sw $t0, p_10
+
+    # Temp_72 := PrintInt()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintInt
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Exit program
+    li $v0, 10
+    syscall
+
+error_div_by_zero:
+    la $a0, msg_div_zero
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_null_pointer:
+    la $a0, msg_null_ptr
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_bounds:
+    la $a0, msg_bounds
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+PrintInt:
+    # Print integer (expects value in p_10 variable)
+    lw $a0, p_10    # load value to print
+    li $v0, 1    # syscall: print_int
+    syscall
+    li $a0, 32    # print space
+    li $v0, 11    # syscall: print_char
+    syscall
+    jr $ra    # return
+
+PrintString:
+    # Print string (expects value in p_10 variable)
+    lw $a0, p_10    # load string address to print
+    li $v0, 4    # syscall: print_string
+    syscall
+    jr $ra    # return
+
+# Program exit
+    li $v0, 10
+    syscall

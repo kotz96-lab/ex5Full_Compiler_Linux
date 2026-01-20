@@ -1,0 +1,722 @@
+.data
+msg_div_zero: .asciiz "Illegal Division By Zero"
+msg_null_ptr: .asciiz "Invalid Pointer Dereference"
+msg_bounds: .asciiz "Access Violation"
+p_10: .word 0
+A_9: .word 0
+row0_10: .word 0
+row1_11: .word 0
+row2_12: .word 0
+A_13: .word 0
+
+.text
+.globl main
+
+main:
+    j __user_main    # Jump to main function
+trace3x3:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Allocate A_9
+    # Allocate A_9
+
+    # Temp_2 := A_9
+    lw $t1, A_9
+
+    # Temp_3 := 0
+    li $t0, 0
+
+    # Temp_4 := ARRAY_ACCESS(Temp_2[Temp_3], elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t1, $s0
+    lw $t0, 0($s0)
+
+    # Temp_5 := 0
+    li $t1, 0
+
+    # Temp_6 := ARRAY_ACCESS(Temp_4[Temp_5], elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t0, $s0
+    lw $t1, 0($s0)
+
+    # Temp_7 := A_9
+    lw $t2, A_9
+
+    # Temp_8 := 1
+    li $t0, 1
+
+    # Temp_9 := ARRAY_ACCESS(Temp_7[Temp_8], elemSize=4)
+    # Check array bounds
+    beq $t2, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t2)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t2, $s0
+    lw $t2, 0($s0)
+
+    # Temp_10 := 1
+    li $t0, 1
+
+    # Temp_11 := ARRAY_ACCESS(Temp_9[Temp_10], elemSize=4)
+    # Check array bounds
+    beq $t2, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t2)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t2, $s0
+    lw $t0, 0($s0)
+
+    # Temp_1 := Temp_6 + Temp_11
+    # Saturated addition
+    add $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_0
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_1
+    j saturate_add_done_2
+saturate_add_max_0:
+    li $t0, 32767
+    j saturate_add_done_2
+saturate_add_min_1:
+    li $t0, -32768
+saturate_add_done_2:
+
+    # Temp_12 := A_9
+    lw $t1, A_9
+
+    # Temp_13 := 2
+    li $t2, 2
+
+    # Temp_14 := ARRAY_ACCESS(Temp_12[Temp_13], elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t2, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t2, $s0, error_bounds
+    sll $s0, $t2, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t1, $s0
+    lw $t1, 0($s0)
+
+    # Temp_15 := 2
+    li $t2, 2
+
+    # Temp_16 := ARRAY_ACCESS(Temp_14[Temp_15], elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t2, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t2, $s0, error_bounds
+    sll $s0, $t2, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t1, $s0
+    lw $t1, 0($s0)
+
+    # Temp_0 := Temp_1 + Temp_16
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_3
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_4
+    j saturate_add_done_5
+saturate_add_max_3:
+    li $t0, 32767
+    j saturate_add_done_5
+saturate_add_min_4:
+    li $t0, -32768
+saturate_add_done_5:
+
+    # RETURN Temp_0
+    move $v0, $t0    # return value
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+__user_main:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Allocate row0_10
+    # Allocate row0_10
+
+    # Temp_18 := 3
+    li $t0, 3
+
+    # Temp_17 := NEW_ARRAY(int[Temp_18], elemSize=4)
+    # Allocate array
+    li $s0, 4
+    mul $s0, $t0, $s0    # size * elemSize
+    addi $a0, $s0, 4    # +4 for length field
+    li $v0, 9    # malloc
+    syscall
+    sw $t0, 0($v0)    # store length
+    move $t0, $v0
+
+    # row0_10 := Temp_17
+    sw $t0, row0_10
+
+    # Allocate row1_11
+    # Allocate row1_11
+
+    # Temp_20 := 3
+    li $t0, 3
+
+    # Temp_19 := NEW_ARRAY(int[Temp_20], elemSize=4)
+    # Allocate array
+    li $s0, 4
+    mul $s0, $t0, $s0    # size * elemSize
+    addi $a0, $s0, 4    # +4 for length field
+    li $v0, 9    # malloc
+    syscall
+    sw $t0, 0($v0)    # store length
+    move $t0, $v0
+
+    # row1_11 := Temp_19
+    sw $t0, row1_11
+
+    # Allocate row2_12
+    # Allocate row2_12
+
+    # Temp_22 := 3
+    li $t0, 3
+
+    # Temp_21 := NEW_ARRAY(int[Temp_22], elemSize=4)
+    # Allocate array
+    li $s0, 4
+    mul $s0, $t0, $s0    # size * elemSize
+    addi $a0, $s0, 4    # +4 for length field
+    li $v0, 9    # malloc
+    syscall
+    sw $t0, 0($v0)    # store length
+    move $t0, $v0
+
+    # row2_12 := Temp_21
+    sw $t0, row2_12
+
+    # Allocate A_13
+    # Allocate A_13
+
+    # Temp_24 := 3
+    li $t0, 3
+
+    # Temp_23 := NEW_ARRAY(int[Temp_24], elemSize=4)
+    # Allocate array
+    li $s0, 4
+    mul $s0, $t0, $s0    # size * elemSize
+    addi $a0, $s0, 4    # +4 for length field
+    li $v0, 9    # malloc
+    syscall
+    sw $t0, 0($v0)    # store length
+    move $t0, $v0
+
+    # A_13 := Temp_23
+    sw $t0, A_13
+
+    # Temp_25 := row0_10
+    lw $t0, row0_10
+
+    # Temp_26 := A_13
+    lw $t2, A_13
+
+    # Temp_27 := 0
+    li $t1, 0
+
+    # ARRAY_STORE(Temp_26[Temp_27], Temp_25, elemSize=4)
+    # Check array bounds
+    beq $t2, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t2)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2
+    addi $s0, $s0, 4
+    add $s0, $t2, $s0
+    sw $t0, 0($s0)
+
+    # Temp_28 := row1_11
+    lw $t2, row1_11
+
+    # Temp_29 := A_13
+    lw $t1, A_13
+
+    # Temp_30 := 1
+    li $t0, 1
+
+    # ARRAY_STORE(Temp_29[Temp_30], Temp_28, elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2
+    addi $s0, $s0, 4
+    add $s0, $t1, $s0
+    sw $t2, 0($s0)
+
+    # Temp_31 := row2_12
+    lw $t1, row2_12
+
+    # Temp_32 := A_13
+    lw $t0, A_13
+
+    # Temp_33 := 2
+    li $t2, 2
+
+    # ARRAY_STORE(Temp_32[Temp_33], Temp_31, elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t2, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t2, $s0, error_bounds
+    sll $s0, $t2, 2
+    addi $s0, $s0, 4
+    add $s0, $t0, $s0
+    sw $t1, 0($s0)
+
+    # Temp_34 := 0
+    li $t1, 0
+
+    # Temp_35 := A_13
+    lw $t2, A_13
+
+    # Temp_36 := 0
+    li $t0, 0
+
+    # Temp_37 := ARRAY_ACCESS(Temp_35[Temp_36], elemSize=4)
+    # Check array bounds
+    beq $t2, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t2)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t2, $s0
+    lw $t2, 0($s0)
+
+    # Temp_38 := 0
+    li $t0, 0
+
+    # ARRAY_STORE(Temp_37[Temp_38], Temp_34, elemSize=4)
+    # Check array bounds
+    beq $t2, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t2)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2
+    addi $s0, $s0, 4
+    add $s0, $t2, $s0
+    sw $t1, 0($s0)
+
+    # Temp_39 := 1
+    li $t1, 1
+
+    # Temp_40 := A_13
+    lw $t0, A_13
+
+    # Temp_41 := 0
+    li $t2, 0
+
+    # Temp_42 := ARRAY_ACCESS(Temp_40[Temp_41], elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t2, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t2, $s0, error_bounds
+    sll $s0, $t2, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t0, $s0
+    lw $t2, 0($s0)
+
+    # Temp_43 := 1
+    li $t0, 1
+
+    # ARRAY_STORE(Temp_42[Temp_43], Temp_39, elemSize=4)
+    # Check array bounds
+    beq $t2, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t2)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2
+    addi $s0, $s0, 4
+    add $s0, $t2, $s0
+    sw $t1, 0($s0)
+
+    # Temp_44 := 2
+    li $t1, 2
+
+    # Temp_45 := A_13
+    lw $t2, A_13
+
+    # Temp_46 := 0
+    li $t0, 0
+
+    # Temp_47 := ARRAY_ACCESS(Temp_45[Temp_46], elemSize=4)
+    # Check array bounds
+    beq $t2, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t2)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t2, $s0
+    lw $t0, 0($s0)
+
+    # Temp_48 := 2
+    li $t2, 2
+
+    # ARRAY_STORE(Temp_47[Temp_48], Temp_44, elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t2, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t2, $s0, error_bounds
+    sll $s0, $t2, 2
+    addi $s0, $s0, 4
+    add $s0, $t0, $s0
+    sw $t1, 0($s0)
+
+    # Temp_49 := 3
+    li $t0, 3
+
+    # Temp_50 := A_13
+    lw $t1, A_13
+
+    # Temp_51 := 1
+    li $t2, 1
+
+    # Temp_52 := ARRAY_ACCESS(Temp_50[Temp_51], elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t2, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t2, $s0, error_bounds
+    sll $s0, $t2, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t1, $s0
+    lw $t2, 0($s0)
+
+    # Temp_53 := 0
+    li $t1, 0
+
+    # ARRAY_STORE(Temp_52[Temp_53], Temp_49, elemSize=4)
+    # Check array bounds
+    beq $t2, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t2)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2
+    addi $s0, $s0, 4
+    add $s0, $t2, $s0
+    sw $t0, 0($s0)
+
+    # Temp_54 := 4
+    li $t2, 4
+
+    # Temp_55 := A_13
+    lw $t1, A_13
+
+    # Temp_56 := 1
+    li $t0, 1
+
+    # Temp_57 := ARRAY_ACCESS(Temp_55[Temp_56], elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t1, $s0
+    lw $t0, 0($s0)
+
+    # Temp_58 := 1
+    li $t1, 1
+
+    # ARRAY_STORE(Temp_57[Temp_58], Temp_54, elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2
+    addi $s0, $s0, 4
+    add $s0, $t0, $s0
+    sw $t2, 0($s0)
+
+    # Temp_59 := 5
+    li $t2, 5
+
+    # Temp_60 := A_13
+    lw $t0, A_13
+
+    # Temp_61 := 1
+    li $t1, 1
+
+    # Temp_62 := ARRAY_ACCESS(Temp_60[Temp_61], elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t0, $s0
+    lw $t1, 0($s0)
+
+    # Temp_63 := 2
+    li $t0, 2
+
+    # ARRAY_STORE(Temp_62[Temp_63], Temp_59, elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2
+    addi $s0, $s0, 4
+    add $s0, $t1, $s0
+    sw $t2, 0($s0)
+
+    # Temp_64 := 6
+    li $t2, 6
+
+    # Temp_65 := A_13
+    lw $t1, A_13
+
+    # Temp_66 := 2
+    li $t0, 2
+
+    # Temp_67 := ARRAY_ACCESS(Temp_65[Temp_66], elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t1, $s0
+    lw $t0, 0($s0)
+
+    # Temp_68 := 0
+    li $t1, 0
+
+    # ARRAY_STORE(Temp_67[Temp_68], Temp_64, elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2
+    addi $s0, $s0, 4
+    add $s0, $t0, $s0
+    sw $t2, 0($s0)
+
+    # Temp_69 := 7
+    li $t0, 7
+
+    # Temp_70 := A_13
+    lw $t2, A_13
+
+    # Temp_71 := 2
+    li $t1, 2
+
+    # Temp_72 := ARRAY_ACCESS(Temp_70[Temp_71], elemSize=4)
+    # Check array bounds
+    beq $t2, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t2)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t2, $s0
+    lw $t1, 0($s0)
+
+    # Temp_73 := 1
+    li $t2, 1
+
+    # ARRAY_STORE(Temp_72[Temp_73], Temp_69, elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t2, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t2, $s0, error_bounds
+    sll $s0, $t2, 2
+    addi $s0, $s0, 4
+    add $s0, $t1, $s0
+    sw $t0, 0($s0)
+
+    # Temp_74 := 8
+    li $t2, 8
+
+    # Temp_75 := A_13
+    lw $t0, A_13
+
+    # Temp_76 := 2
+    li $t1, 2
+
+    # Temp_77 := ARRAY_ACCESS(Temp_75[Temp_76], elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t0, $s0
+    lw $t1, 0($s0)
+
+    # Temp_78 := 2
+    li $t0, 2
+
+    # ARRAY_STORE(Temp_77[Temp_78], Temp_74, elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2
+    addi $s0, $s0, 4
+    add $s0, $t1, $s0
+    sw $t2, 0($s0)
+
+    # Temp_79 := A_13
+    lw $t0, A_13
+
+    # A_9 := Temp_79
+    # Save A_9 before store (recursive call ahead)
+    addi $sp, $sp, -4    # allocate space
+    lw $t8, A_9    # load current value
+    sw $t8, 0($sp)    # save on stack
+    sw $t0, A_9
+
+    # Temp_80 := trace3x3()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal trace3x3
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+    # Restore A_9 after call (from pre-store save)
+    lw $t8, 0($sp)    # load saved value
+    sw $t8, A_9    # restore global
+    addi $sp, $sp, 4    # deallocate global save space
+
+    # p_10 := Temp_80
+    sw $t0, p_10
+
+    # Temp_81 := PrintInt()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintInt
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Exit program
+    li $v0, 10
+    syscall
+
+error_div_by_zero:
+    la $a0, msg_div_zero
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_null_pointer:
+    la $a0, msg_null_ptr
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_bounds:
+    la $a0, msg_bounds
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+PrintInt:
+    # Print integer (expects value in p_10 variable)
+    lw $a0, p_10    # load value to print
+    li $v0, 1    # syscall: print_int
+    syscall
+    li $a0, 32    # print space
+    li $v0, 11    # syscall: print_char
+    syscall
+    jr $ra    # return
+
+PrintString:
+    # Print string (expects value in p_10 variable)
+    lw $a0, p_10    # load string address to print
+    li $v0, 4    # syscall: print_string
+    syscall
+    jr $ra    # return
+
+# Program exit
+    li $v0, 10
+    syscall

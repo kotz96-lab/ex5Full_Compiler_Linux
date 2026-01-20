@@ -1,0 +1,166 @@
+package ast;
+
+import ir.Ir;
+import ir.IrCommandLabel;
+import temp.Temp;
+import types.*;
+import symboltable.*;
+import types.TypeVoid;
+
+public class AstDecFunc extends AstDec
+{
+	/****************/
+	/* DATA MEMBERS */
+	/****************/
+	public AstType returnType;
+	public String name;
+	public AstTypeNameList params;
+	public AstStmtList body;
+
+	/******************/
+	/* CONSTRUCTOR(S) */
+	/******************/
+	public AstDecFunc(
+        AstType returnTypeName,
+		String name,
+		AstTypeNameList params,
+		AstStmtList body,
+		int line)
+	{
+		/******************************/
+		/* SET A UNIQUE SERIAL NUMBER */
+		/******************************/
+		serialNumber = AstNodeSerialNumber.getFresh();
+
+		this.returnType = returnTypeName;
+		this.name = name;
+		this.params = params;
+		this.body = body;
+		this.line = line;
+	}
+
+	/************************************************************/
+	/* The printing message for a function declaration AST node */
+	/************************************************************/
+	public void printMe()
+	{
+		/*************************************************/
+		/* AST NODE TYPE = AST NODE FUNCTION DECLARATION */
+		/*************************************************/
+		System.out.format("FUNC(%s):%s\n",name,returnType.name);
+
+		/***************************************/
+		/* RECURSIVELY PRINT params + body ... */
+		/***************************************/
+		if (params != null) params.printMe();
+		if (body   != null) body.printMe();
+		
+		/***************************************/
+		/* PRINT Node to AST GRAPHVIZ DOT file */
+		/***************************************/
+		AstGraphviz.getInstance().logNode(
+                serialNumber,
+			String.format("FUNC(%s)\n:%s\n",name,returnType.name));
+		
+		/****************************************/
+		/* PRINT Edges to AST GRAPHVIZ DOT file */
+		/****************************************/
+		if (params != null) AstGraphviz.getInstance().logEdge(serialNumber,params.serialNumber);
+		if (body   != null) AstGraphviz.getInstance().logEdge(serialNumber,body.serialNumber);
+	}
+
+	public void semantMe() throws SemanticException
+	{
+		Type t;
+		Type returnTypeFromTable;
+		TypeList type_list = null;
+
+		/*******************/
+		/* [0] return type */
+		/*******************/
+        returnTypeFromTable = SymbolTable.getInstance().find(returnType.name);
+		if (returnTypeFromTable == null)
+		{
+            if (returnType.name.equals("void")) {
+                returnTypeFromTable = TypeVoid.getInstance();
+            }
+            else {
+                throw new SemanticException(String.format("non existing return type %s", returnType.name));
+            }
+		}
+
+		/*****************************************/
+		/* [0.5] Build param types for function signature */
+		/*****************************************/
+		for (AstTypeNameList it = params; it != null; it = it.tail)
+		{
+			t = SymbolTable.getInstance().find(it.head.type.name);
+			if (t == null)
+			{
+				throw new SemanticException(String.format("non existing type %s", it.head.type.name));
+			}
+			if (t instanceof TypeVoid)
+			{
+				throw new SemanticException(String.format("parameter %s cannot be of type void", it.head.name));
+			}
+			type_list = new TypeList(t, type_list);
+		}
+
+		/***************************************************/
+		/* [1] Enter the Function Type to the Symbol Table */
+		/* (Do this BEFORE semanting body for recursion)   */
+		/***************************************************/
+		TypeFunction funcType = new TypeFunction(returnTypeFromTable, name, type_list);
+		SymbolTable.getInstance().enter(name, funcType);
+
+		/****************************/
+		/* [2] Begin Function Scope */
+		/****************************/
+		SymbolTable.getInstance().beginScope();
+
+		/***************************/
+		/* [3] Enter Input Params to scope */
+		/***************************/
+		for (AstTypeNameList it = params; it != null; it = it.tail)
+		{
+			t = SymbolTable.getInstance().find(it.head.type.name);
+			SymbolTableEntry entry = SymbolTable.getInstance().enter(it.head.name, t);
+
+		// Store the parameter variable name with offset for IR generation
+		// Use the symbol table's prevtopIndex, NOT the AST node's serialNumber
+			String paramVarName = String.format("%s_%d", it.head.name, entry.prevtopIndex);
+			funcType.paramVarNames.add(0, paramVarName);  // Prepend to reverse order
+		}
+
+		/*******************/
+		/* [4] Semant Body */
+		/*******************/
+		// Set the expected return type for return statements inside this function
+		AstStmtReturn.expectedReturnType = returnTypeFromTable;
+		body.semantMe();
+		AstStmtReturn.expectedReturnType = null;
+
+		/*****************/
+		/* [5] End Scope */
+		/*****************/
+		SymbolTable.getInstance().endScope();
+	}
+
+    public Temp irMe()
+    {
+        Ir.getInstance().AddIrCommand(new IrCommandLabel(name));
+
+        // Allocate parameter variables
+        TypeFunction funcType = (TypeFunction) SymbolTable.getInstance().find(name);
+        if (funcType != null && funcType.paramVarNames != null) {
+            for (String paramVarName : funcType.paramVarNames) {
+                Ir.getInstance().AddIrCommand(new ir.IrCommandAllocate(paramVarName));
+            }
+        }
+
+        if (body != null) body.irMe();
+
+        return null;
+    }
+
+}

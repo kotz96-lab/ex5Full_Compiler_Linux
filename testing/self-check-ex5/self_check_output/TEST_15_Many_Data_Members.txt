@@ -1,0 +1,193 @@
+.data
+msg_div_zero: .asciiz "Illegal Division By Zero"
+msg_null_ptr: .asciiz "Invalid Pointer Dereference"
+msg_bounds: .asciiz "Access Violation"
+f_9: .word 0
+p_10: .word 0
+
+.text
+.globl main
+
+main:
+    j __user_main    # Jump to main function
+sum:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Temp_0 := 4
+    li $t0, 4
+
+    # RETURN Temp_0
+    move $v0, $t0    # return value
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+__user_main:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Allocate f_9
+    # Allocate f_9
+
+    # Temp_1 := NEW_OBJECT("foo", size=132)
+    # Allocate object: foo
+    li $a0, 132
+    li $v0, 9    # malloc
+    syscall
+    move $t0, $v0
+    sw $zero, 0($v0)
+    sw $zero, 4($v0)
+    sw $zero, 8($v0)
+    sw $zero, 12($v0)
+    sw $zero, 16($v0)
+    sw $zero, 20($v0)
+    sw $zero, 24($v0)
+    sw $zero, 28($v0)
+    sw $zero, 32($v0)
+    sw $zero, 36($v0)
+    sw $zero, 40($v0)
+    sw $zero, 44($v0)
+    sw $zero, 48($v0)
+    sw $zero, 52($v0)
+    sw $zero, 56($v0)
+    sw $zero, 60($v0)
+    sw $zero, 64($v0)
+    sw $zero, 68($v0)
+    sw $zero, 72($v0)
+    sw $zero, 76($v0)
+    sw $zero, 80($v0)
+    sw $zero, 84($v0)
+    sw $zero, 88($v0)
+    sw $zero, 92($v0)
+    sw $zero, 96($v0)
+    sw $zero, 100($v0)
+    sw $zero, 104($v0)
+    sw $zero, 108($v0)
+    sw $zero, 112($v0)
+    sw $zero, 116($v0)
+    sw $zero, 120($v0)
+    sw $zero, 124($v0)
+    sw $zero, 128($v0)
+
+    # f_9 := Temp_1
+    # Save f_9 before store (recursive call ahead)
+    addi $sp, $sp, -4    # allocate space
+    lw $t8, f_9    # load current value
+    sw $t8, 0($sp)    # save on stack
+    sw $t0, f_9
+
+    # Temp_2 := sum()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal sum
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+    # Restore f_9 after call (from pre-store save)
+    lw $t8, 0($sp)    # load saved value
+    sw $t8, f_9    # restore global
+    addi $sp, $sp, 4    # deallocate global save space
+
+    # p_10 := Temp_2
+    sw $t0, p_10
+
+    # Temp_3 := PrintInt()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintInt
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Exit program
+    li $v0, 10
+    syscall
+
+error_div_by_zero:
+    la $a0, msg_div_zero
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_null_pointer:
+    la $a0, msg_null_ptr
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_bounds:
+    la $a0, msg_bounds
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+PrintInt:
+    # Print integer (expects value in p_10 variable)
+    lw $a0, p_10    # load value to print
+    li $v0, 1    # syscall: print_int
+    syscall
+    li $a0, 32    # print space
+    li $v0, 11    # syscall: print_char
+    syscall
+    jr $ra    # return
+
+PrintString:
+    # Print string (expects value in p_10 variable)
+    lw $a0, p_10    # load string address to print
+    li $v0, 4    # syscall: print_string
+    syscall
+    jr $ra    # return
+
+# Program exit
+    li $v0, 10
+    syscall

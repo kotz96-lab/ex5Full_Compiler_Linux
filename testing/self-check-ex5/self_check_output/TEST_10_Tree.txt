@@ -1,0 +1,1017 @@
+.data
+msg_div_zero: .asciiz "Illegal Division By Zero"
+msg_null_ptr: .asciiz "Invalid Pointer Dereference"
+msg_bounds: .asciiz "Access Violation"
+weight_11: .word 0
+right_10: .word 0
+i_12: .word 0
+p_10: .word 0
+left_9: .word 0
+t_8: .word 0
+TA_11: .word 0
+res_12: .word 0
+root_10: .word 0
+
+.text
+.globl main
+
+main:
+    j __user_main    # Jump to main function
+sum:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Allocate t_8
+    # Allocate t_8
+
+    # Allocate left_9
+    # Allocate left_9
+
+    # Temp_0 := t_8
+    lw $t0, t_8
+
+    # Temp_1 := FIELD_ACCESS(Temp_0.left, offset=0)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 0($t0)
+
+    # left_9 := Temp_1
+    sw $t0, left_9
+
+    # Allocate right_10
+    # Allocate right_10
+
+    # Temp_2 := t_8
+    lw $t0, t_8
+
+    # Temp_3 := FIELD_ACCESS(Temp_2.right, offset=4)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 4($t0)
+
+    # right_10 := Temp_3
+    sw $t0, right_10
+
+    # Allocate weight_11
+    # Allocate weight_11
+
+    # Temp_4 := t_8
+    lw $t0, t_8
+
+    # Temp_5 := FIELD_ACCESS(Temp_4.weight, offset=8)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 8($t0)
+
+    # weight_11 := Temp_5
+    sw $t0, weight_11
+
+    # Allocate res_12
+    # Allocate res_12
+
+    # Temp_6 := weight_11
+    lw $t0, weight_11
+
+    # res_12 := Temp_6
+    sw $t0, res_12
+
+    # Temp_8 := 1
+    li $t1, 1
+
+    # Temp_10 := left_9
+    lw $t2, left_9
+
+    # Temp_11 := NIL
+    li $t0, 0    # nil = 0
+
+    # Temp_9 := Temp_10 == Temp_11
+    move $t9, $t0
+    li $t0, 0    # assume not equal
+    bne $t2, $t9, eq_done_1
+    li $t0, 1    # they are equal
+eq_done_1:
+
+    # Temp_7 := Temp_8 - Temp_9
+    # Saturated subtraction
+    sub $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_sub_max_2
+    li $t9, -32768
+    blt $t0, $t9, saturate_sub_min_3
+    j saturate_sub_done_4
+saturate_sub_max_2:
+    li $t0, 32767
+    j saturate_sub_done_4
+saturate_sub_min_3:
+    li $t0, -32768
+saturate_sub_done_4:
+
+    # JumpIfEqToZero Temp_7 Label_1_end
+    beq $t0, $zero, Label_1_end
+
+    # Temp_13 := res_12
+    lw $t1, res_12
+
+    # Temp_14 := left_9
+    lw $t0, left_9
+
+    # t_8 := Temp_14
+    # Save t_8 before store (recursive call ahead)
+    addi $sp, $sp, -4    # allocate space
+    lw $t8, t_8    # load current value
+    sw $t8, 0($sp)    # save on stack
+    sw $t0, t_8
+
+    # Temp_15 := sum()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal sum
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+    # Restore t_8 after call (from pre-store save)
+    lw $t8, 0($sp)    # load saved value
+    sw $t8, t_8    # restore global
+    addi $sp, $sp, 4    # deallocate global save space
+
+    # Temp_12 := Temp_13 + Temp_15
+    # Saturated addition
+    add $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_5
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_6
+    j saturate_add_done_7
+saturate_add_max_5:
+    li $t0, 32767
+    j saturate_add_done_7
+saturate_add_min_6:
+    li $t0, -32768
+saturate_add_done_7:
+
+    # res_12 := Temp_12
+    sw $t0, res_12
+
+Label_1_end:
+
+    # Temp_17 := 1
+    li $t1, 1
+
+    # Temp_19 := right_10
+    lw $t0, right_10
+
+    # Temp_20 := NIL
+    li $t2, 0    # nil = 0
+
+    # Temp_18 := Temp_19 == Temp_20
+    move $t8, $t0
+    li $t0, 0    # assume not equal
+    bne $t8, $t2, eq_done_9
+    li $t0, 1    # they are equal
+eq_done_9:
+
+    # Temp_16 := Temp_17 - Temp_18
+    # Saturated subtraction
+    sub $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_sub_max_10
+    li $t9, -32768
+    blt $t0, $t9, saturate_sub_min_11
+    j saturate_sub_done_12
+saturate_sub_max_10:
+    li $t0, 32767
+    j saturate_sub_done_12
+saturate_sub_min_11:
+    li $t0, -32768
+saturate_sub_done_12:
+
+    # JumpIfEqToZero Temp_16 Label_3_end
+    beq $t0, $zero, Label_3_end
+
+    # Temp_22 := res_12
+    lw $t1, res_12
+
+    # Temp_23 := right_10
+    lw $t0, right_10
+
+    # t_8 := Temp_23
+    # Save t_8 before store (recursive call ahead)
+    addi $sp, $sp, -4    # allocate space
+    lw $t8, t_8    # load current value
+    sw $t8, 0($sp)    # save on stack
+    sw $t0, t_8
+
+    # Temp_24 := sum()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal sum
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+    # Restore t_8 after call (from pre-store save)
+    lw $t8, 0($sp)    # load saved value
+    sw $t8, t_8    # restore global
+    addi $sp, $sp, 4    # deallocate global save space
+
+    # Temp_21 := Temp_22 + Temp_24
+    # Saturated addition
+    add $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_13
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_14
+    j saturate_add_done_15
+saturate_add_max_13:
+    li $t0, 32767
+    j saturate_add_done_15
+saturate_add_min_14:
+    li $t0, -32768
+saturate_add_done_15:
+
+    # res_12 := Temp_21
+    sw $t0, res_12
+
+Label_3_end:
+
+    # Temp_25 := res_12
+    lw $t0, res_12
+
+    # RETURN Temp_25
+    move $v0, $t0    # return value
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+__user_main:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Allocate root_10
+    # Allocate root_10
+
+    # Temp_26 := NEW_OBJECT("Tree", size=12)
+    # Allocate object: Tree
+    li $a0, 12
+    li $v0, 9    # malloc
+    syscall
+    move $t0, $v0
+    sw $zero, 0($v0)
+    sw $zero, 4($v0)
+    sw $zero, 8($v0)
+
+    # root_10 := Temp_26
+    sw $t0, root_10
+
+    # Allocate TA_11
+    # Allocate TA_11
+
+    # Temp_28 := 17
+    li $t0, 17
+
+    # Temp_27 := NEW_ARRAY(int[Temp_28], elemSize=4)
+    # Allocate array
+    li $s0, 4
+    mul $s0, $t0, $s0    # size * elemSize
+    addi $a0, $s0, 4    # +4 for length field
+    li $v0, 9    # malloc
+    syscall
+    sw $t0, 0($v0)    # store length
+    move $t0, $v0
+
+    # TA_11 := Temp_27
+    sw $t0, TA_11
+
+    # Allocate i_12
+    # Allocate i_12
+
+    # Temp_29 := 0
+    li $t0, 0
+
+    # i_12 := Temp_29
+    sw $t0, i_12
+
+Label_5_start:
+
+    # Temp_31 := i_12
+    lw $t1, i_12
+
+    # Temp_32 := 17
+    li $t0, 17
+
+    # Temp_30 := Temp_31 < Temp_32
+    slt $t0, $t1, $t0
+
+    # JumpIfEqToZero Temp_30 Label_4_end
+    beq $t0, $zero, Label_4_end
+
+    # Temp_33 := NEW_OBJECT("Tree", size=12)
+    # Allocate object: Tree
+    li $a0, 12
+    li $v0, 9    # malloc
+    syscall
+    move $t0, $v0
+    sw $zero, 0($v0)
+    sw $zero, 4($v0)
+    sw $zero, 8($v0)
+
+    # Temp_34 := TA_11
+    lw $t2, TA_11
+
+    # Temp_35 := i_12
+    lw $t1, i_12
+
+    # ARRAY_STORE(Temp_34[Temp_35], Temp_33, elemSize=4)
+    # Check array bounds
+    beq $t2, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t2)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2
+    addi $s0, $s0, 4
+    add $s0, $t2, $s0
+    sw $t0, 0($s0)
+
+    # Temp_37 := 19
+    li $t0, 19
+
+    # Temp_38 := i_12
+    lw $t1, i_12
+
+    # Temp_36 := Temp_37 * Temp_38
+    # Saturated multiplication
+    mul $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_mul_max_16
+    li $t9, -32768
+    blt $t0, $t9, saturate_mul_min_17
+    j saturate_mul_done_18
+saturate_mul_max_16:
+    li $t0, 32767
+    j saturate_mul_done_18
+saturate_mul_min_17:
+    li $t0, -32768
+saturate_mul_done_18:
+
+    # Temp_39 := TA_11
+    lw $t1, TA_11
+
+    # Temp_40 := i_12
+    lw $t2, i_12
+
+    # Temp_41 := ARRAY_ACCESS(Temp_39[Temp_40], elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t2, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t2, $s0, error_bounds
+    sll $s0, $t2, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t1, $s0
+    lw $t1, 0($s0)
+
+    # FIELD_STORE(Temp_41.weight, offset=8, Temp_36)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    sw $t0, 8($t1)
+
+    # Temp_43 := i_12
+    lw $t1, i_12
+
+    # Temp_44 := 1
+    li $t0, 1
+
+    # Temp_42 := Temp_43 + Temp_44
+    # Saturated addition
+    add $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_19
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_20
+    j saturate_add_done_21
+saturate_add_max_19:
+    li $t0, 32767
+    j saturate_add_done_21
+saturate_add_min_20:
+    li $t0, -32768
+saturate_add_done_21:
+
+    # i_12 := Temp_42
+    sw $t0, i_12
+
+    # Jump Label_5_start
+    j Label_5_start
+
+Label_4_end:
+
+    # Temp_45 := TA_11
+    lw $t0, TA_11
+
+    # Temp_46 := 0
+    li $t1, 0
+
+    # Temp_47 := ARRAY_ACCESS(Temp_45[Temp_46], elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t0, $s0
+    lw $t0, 0($s0)
+
+    # Temp_48 := root_10
+    lw $t1, root_10
+
+    # FIELD_STORE(Temp_48.left, offset=0, Temp_47)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    sw $t0, 0($t1)
+
+    # Temp_49 := TA_11
+    lw $t1, TA_11
+
+    # Temp_50 := 1
+    li $t0, 1
+
+    # Temp_51 := ARRAY_ACCESS(Temp_49[Temp_50], elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t1, $s0
+    lw $t0, 0($s0)
+
+    # Temp_52 := root_10
+    lw $t1, root_10
+
+    # FIELD_STORE(Temp_52.right, offset=4, Temp_51)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    sw $t0, 4($t1)
+
+    # Temp_53 := TA_11
+    lw $t0, TA_11
+
+    # Temp_54 := 2
+    li $t1, 2
+
+    # Temp_55 := ARRAY_ACCESS(Temp_53[Temp_54], elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t0, $s0
+    lw $t1, 0($s0)
+
+    # Temp_56 := root_10
+    lw $t0, root_10
+
+    # Temp_57 := FIELD_ACCESS(Temp_56.left, offset=0)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 0($t0)
+
+    # FIELD_STORE(Temp_57.left, offset=0, Temp_55)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 0($t0)
+
+    # Temp_58 := TA_11
+    lw $t1, TA_11
+
+    # Temp_59 := 3
+    li $t0, 3
+
+    # Temp_60 := ARRAY_ACCESS(Temp_58[Temp_59], elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t1, $s0
+    lw $t1, 0($s0)
+
+    # Temp_61 := root_10
+    lw $t0, root_10
+
+    # Temp_62 := FIELD_ACCESS(Temp_61.left, offset=0)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 0($t0)
+
+    # FIELD_STORE(Temp_62.right, offset=4, Temp_60)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 4($t0)
+
+    # Temp_63 := TA_11
+    lw $t0, TA_11
+
+    # Temp_64 := 4
+    li $t1, 4
+
+    # Temp_65 := ARRAY_ACCESS(Temp_63[Temp_64], elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t0, $s0
+    lw $t1, 0($s0)
+
+    # Temp_66 := root_10
+    lw $t0, root_10
+
+    # Temp_67 := FIELD_ACCESS(Temp_66.right, offset=4)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 4($t0)
+
+    # FIELD_STORE(Temp_67.left, offset=0, Temp_65)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 0($t0)
+
+    # Temp_68 := TA_11
+    lw $t0, TA_11
+
+    # Temp_69 := 5
+    li $t1, 5
+
+    # Temp_70 := ARRAY_ACCESS(Temp_68[Temp_69], elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t0, $s0
+    lw $t0, 0($s0)
+
+    # Temp_71 := root_10
+    lw $t1, root_10
+
+    # Temp_72 := FIELD_ACCESS(Temp_71.right, offset=4)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    lw $t1, 4($t1)
+
+    # FIELD_STORE(Temp_72.right, offset=4, Temp_70)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    sw $t0, 4($t1)
+
+    # Temp_73 := TA_11
+    lw $t0, TA_11
+
+    # Temp_74 := 6
+    li $t1, 6
+
+    # Temp_75 := ARRAY_ACCESS(Temp_73[Temp_74], elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t0, $s0
+    lw $t1, 0($s0)
+
+    # Temp_76 := root_10
+    lw $t0, root_10
+
+    # Temp_77 := FIELD_ACCESS(Temp_76.left, offset=0)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 0($t0)
+
+    # Temp_78 := FIELD_ACCESS(Temp_77.left, offset=0)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 0($t0)
+
+    # FIELD_STORE(Temp_78.left, offset=0, Temp_75)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 0($t0)
+
+    # Temp_79 := TA_11
+    lw $t0, TA_11
+
+    # Temp_80 := 7
+    li $t1, 7
+
+    # Temp_81 := ARRAY_ACCESS(Temp_79[Temp_80], elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t0, $s0
+    lw $t1, 0($s0)
+
+    # Temp_82 := root_10
+    lw $t0, root_10
+
+    # Temp_83 := FIELD_ACCESS(Temp_82.left, offset=0)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 0($t0)
+
+    # Temp_84 := FIELD_ACCESS(Temp_83.left, offset=0)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 0($t0)
+
+    # FIELD_STORE(Temp_84.right, offset=4, Temp_81)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 4($t0)
+
+    # Temp_85 := TA_11
+    lw $t0, TA_11
+
+    # Temp_86 := 8
+    li $t1, 8
+
+    # Temp_87 := ARRAY_ACCESS(Temp_85[Temp_86], elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t0, $s0
+    lw $t1, 0($s0)
+
+    # Temp_88 := root_10
+    lw $t0, root_10
+
+    # Temp_89 := FIELD_ACCESS(Temp_88.left, offset=0)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 0($t0)
+
+    # Temp_90 := FIELD_ACCESS(Temp_89.right, offset=4)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 4($t0)
+
+    # FIELD_STORE(Temp_90.left, offset=0, Temp_87)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 0($t0)
+
+    # Temp_91 := TA_11
+    lw $t1, TA_11
+
+    # Temp_92 := 9
+    li $t0, 9
+
+    # Temp_93 := ARRAY_ACCESS(Temp_91[Temp_92], elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t1, $s0
+    lw $t1, 0($s0)
+
+    # Temp_94 := root_10
+    lw $t0, root_10
+
+    # Temp_95 := FIELD_ACCESS(Temp_94.left, offset=0)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 0($t0)
+
+    # Temp_96 := FIELD_ACCESS(Temp_95.right, offset=4)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 4($t0)
+
+    # FIELD_STORE(Temp_96.right, offset=4, Temp_93)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 4($t0)
+
+    # Temp_97 := TA_11
+    lw $t1, TA_11
+
+    # Temp_98 := 10
+    li $t0, 10
+
+    # Temp_99 := ARRAY_ACCESS(Temp_97[Temp_98], elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t1, $s0
+    lw $t1, 0($s0)
+
+    # Temp_100 := root_10
+    lw $t0, root_10
+
+    # Temp_101 := FIELD_ACCESS(Temp_100.right, offset=4)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 4($t0)
+
+    # Temp_102 := FIELD_ACCESS(Temp_101.left, offset=0)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 0($t0)
+
+    # FIELD_STORE(Temp_102.left, offset=0, Temp_99)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 0($t0)
+
+    # Temp_103 := TA_11
+    lw $t1, TA_11
+
+    # Temp_104 := 11
+    li $t0, 11
+
+    # Temp_105 := ARRAY_ACCESS(Temp_103[Temp_104], elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t1, $s0
+    lw $t1, 0($s0)
+
+    # Temp_106 := root_10
+    lw $t0, root_10
+
+    # Temp_107 := FIELD_ACCESS(Temp_106.right, offset=4)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 4($t0)
+
+    # Temp_108 := FIELD_ACCESS(Temp_107.left, offset=0)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 0($t0)
+
+    # FIELD_STORE(Temp_108.right, offset=4, Temp_105)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 4($t0)
+
+    # Temp_109 := TA_11
+    lw $t1, TA_11
+
+    # Temp_110 := 12
+    li $t0, 12
+
+    # Temp_111 := ARRAY_ACCESS(Temp_109[Temp_110], elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t1, $s0
+    lw $t0, 0($s0)
+
+    # Temp_112 := root_10
+    lw $t1, root_10
+
+    # Temp_113 := FIELD_ACCESS(Temp_112.right, offset=4)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    lw $t1, 4($t1)
+
+    # Temp_114 := FIELD_ACCESS(Temp_113.right, offset=4)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    lw $t1, 4($t1)
+
+    # FIELD_STORE(Temp_114.left, offset=0, Temp_111)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    sw $t0, 0($t1)
+
+    # Temp_115 := TA_11
+    lw $t1, TA_11
+
+    # Temp_116 := 13
+    li $t0, 13
+
+    # Temp_117 := ARRAY_ACCESS(Temp_115[Temp_116], elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t1, $s0
+    lw $t1, 0($s0)
+
+    # Temp_118 := root_10
+    lw $t0, root_10
+
+    # Temp_119 := FIELD_ACCESS(Temp_118.right, offset=4)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 4($t0)
+
+    # Temp_120 := FIELD_ACCESS(Temp_119.right, offset=4)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 4($t0)
+
+    # FIELD_STORE(Temp_120.right, offset=4, Temp_117)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 4($t0)
+
+    # Temp_121 := root_10
+    lw $t0, root_10
+
+    # t_8 := Temp_121
+    # Save t_8 before store (recursive call ahead)
+    addi $sp, $sp, -4    # allocate space
+    lw $t8, t_8    # load current value
+    sw $t8, 0($sp)    # save on stack
+    sw $t0, t_8
+
+    # Temp_122 := sum()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal sum
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+    # Restore t_8 after call (from pre-store save)
+    lw $t8, 0($sp)    # load saved value
+    sw $t8, t_8    # restore global
+    addi $sp, $sp, 4    # deallocate global save space
+
+    # p_10 := Temp_122
+    sw $t0, p_10
+
+    # Temp_123 := PrintInt()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintInt
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Exit program
+    li $v0, 10
+    syscall
+
+error_div_by_zero:
+    la $a0, msg_div_zero
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_null_pointer:
+    la $a0, msg_null_ptr
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_bounds:
+    la $a0, msg_bounds
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+PrintInt:
+    # Print integer (expects value in p_10 variable)
+    lw $a0, p_10    # load value to print
+    li $v0, 1    # syscall: print_int
+    syscall
+    li $a0, 32    # print space
+    li $v0, 11    # syscall: print_char
+    syscall
+    jr $ra    # return
+
+PrintString:
+    # Print string (expects value in p_10 variable)
+    lw $a0, p_10    # load string address to print
+    li $v0, 4    # syscall: print_string
+    syscall
+    jr $ra    # return
+
+# Program exit
+    li $v0, 10
+    syscall

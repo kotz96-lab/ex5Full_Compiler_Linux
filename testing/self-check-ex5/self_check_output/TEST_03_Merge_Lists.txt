@@ -1,0 +1,772 @@
+.data
+msg_div_zero: .asciiz "Illegal Division By Zero"
+msg_null_ptr: .asciiz "Invalid Pointer Dereference"
+msg_bounds: .asciiz "Access Violation"
+D_16: .word 0
+l_17: .word 0
+l1_8: .word 0
+l2_9: .word 0
+b_10: .word 0
+l3_11: .word 0
+c_11: .word 0
+d_12: .word 0
+a_9: .word 0
+p_10: .word 0
+A_13: .word 0
+B_14: .word 0
+C_15: .word 0
+
+.text
+.globl main
+
+main:
+    j __user_main    # Jump to main function
+MergeLists:
+
+    # Allocate l2_9
+    # Allocate l2_9
+
+    # Allocate l1_8
+    # Allocate l1_8
+
+    # Temp_1 := l1_8
+    lw $t0, l1_8
+
+    # Temp_2 := NIL
+    li $t1, 0    # nil = 0
+
+    # Temp_0 := Temp_1 == Temp_2
+    move $t8, $t0
+    li $t0, 0    # assume not equal
+    bne $t8, $t1, eq_done_1
+    li $t0, 1    # they are equal
+eq_done_1:
+
+    # JumpIfEqToZero Temp_0 Label_1_end
+    beq $t0, $zero, Label_1_end
+
+    # Temp_3 := l2_9
+    lw $t0, l2_9
+
+    # RETURN Temp_3
+    move $v0, $t0    # return value
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 0    # deallocate stack frame
+    jr $ra
+
+Label_1_end:
+
+    # Temp_5 := l2_9
+    lw $t0, l2_9
+
+    # Temp_6 := NIL
+    li $t1, 0    # nil = 0
+
+    # Temp_4 := Temp_5 == Temp_6
+    move $t8, $t0
+    li $t0, 0    # assume not equal
+    bne $t8, $t1, eq_done_3
+    li $t0, 1    # they are equal
+eq_done_3:
+
+    # JumpIfEqToZero Temp_4 Label_3_end
+    beq $t0, $zero, Label_3_end
+
+    # Temp_7 := l1_8
+    lw $t0, l1_8
+
+    # RETURN Temp_7
+    move $v0, $t0    # return value
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 0    # deallocate stack frame
+    jr $ra
+
+Label_3_end:
+
+    # Temp_9 := l1_8
+    lw $t0, l1_8
+
+    # Temp_10 := FIELD_ACCESS(Temp_9.head, offset=0)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 0($t0)
+
+    # Temp_11 := l2_9
+    lw $t1, l2_9
+
+    # Temp_12 := FIELD_ACCESS(Temp_11.head, offset=0)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    lw $t1, 0($t1)
+
+    # Temp_8 := Temp_10 < Temp_12
+    slt $t0, $t0, $t1
+
+    # JumpIfEqToZero Temp_8 Label_5_end
+    beq $t0, $zero, Label_5_end
+
+    # Allocate l3_11
+    # Allocate l3_11
+
+    # Temp_13 := l1_8
+    lw $t0, l1_8
+
+    # l3_11 := Temp_13
+    sw $t0, l3_11
+
+    # Temp_14 := l2_9
+    lw $t0, l2_9
+
+    # l2_9 := Temp_14
+    sw $t0, l2_9
+
+    # Temp_15 := l1_8
+    lw $t0, l1_8
+
+    # Temp_16 := FIELD_ACCESS(Temp_15.tail, offset=4)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 4($t0)
+
+    # l1_8 := Temp_16
+    sw $t0, l1_8
+
+    # Temp_17 := MergeLists()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal MergeLists
+    move $t1, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t0, 0($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Temp_18 := l3_11
+    lw $t0, l3_11
+
+    # FIELD_STORE(Temp_18.tail, offset=4, Temp_17)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 4($t0)
+
+    # Temp_19 := l3_11
+    lw $t0, l3_11
+
+    # RETURN Temp_19
+    move $v0, $t0    # return value
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 0    # deallocate stack frame
+    jr $ra
+
+Label_5_end:
+
+    # Temp_21 := l2_9
+    lw $t0, l2_9
+
+    # Temp_22 := FIELD_ACCESS(Temp_21.head, offset=0)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 0($t0)
+
+    # Temp_23 := l1_8
+    lw $t1, l1_8
+
+    # Temp_24 := FIELD_ACCESS(Temp_23.head, offset=0)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    lw $t1, 0($t1)
+
+    # Temp_20 := Temp_22 < Temp_24
+    slt $t0, $t0, $t1
+
+    # JumpIfEqToZero Temp_20 Label_7_end
+    beq $t0, $zero, Label_7_end
+
+    # Allocate l3_11
+    # Allocate l3_11
+
+    # Temp_25 := l2_9
+    lw $t0, l2_9
+
+    # l3_11 := Temp_25
+    sw $t0, l3_11
+
+    # Temp_26 := l2_9
+    lw $t0, l2_9
+
+    # Temp_27 := FIELD_ACCESS(Temp_26.tail, offset=4)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 4($t0)
+
+    # l2_9 := Temp_27
+    sw $t0, l2_9
+
+    # Temp_28 := l1_8
+    lw $t0, l1_8
+
+    # l1_8 := Temp_28
+    sw $t0, l1_8
+
+    # Temp_29 := MergeLists()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal MergeLists
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Temp_30 := l3_11
+    lw $t1, l3_11
+
+    # FIELD_STORE(Temp_30.tail, offset=4, Temp_29)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    sw $t0, 4($t1)
+
+    # Temp_31 := l3_11
+    lw $t0, l3_11
+
+    # RETURN Temp_31
+    move $v0, $t0    # return value
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 0    # deallocate stack frame
+    jr $ra
+
+Label_7_end:
+
+__user_main:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Allocate a_9
+    # Allocate a_9
+
+    # Temp_32 := NEW_OBJECT("IntList", size=8)
+    # Allocate object: IntList
+    li $a0, 8
+    li $v0, 9    # malloc
+    syscall
+    move $t0, $v0
+    sw $zero, 0($v0)
+    sw $zero, 4($v0)
+
+    # a_9 := Temp_32
+    sw $t0, a_9
+
+    # Allocate b_10
+    # Allocate b_10
+
+    # Temp_33 := NEW_OBJECT("IntList", size=8)
+    # Allocate object: IntList
+    li $a0, 8
+    li $v0, 9    # malloc
+    syscall
+    move $t0, $v0
+    sw $zero, 0($v0)
+    sw $zero, 4($v0)
+
+    # b_10 := Temp_33
+    sw $t0, b_10
+
+    # Allocate c_11
+    # Allocate c_11
+
+    # Temp_34 := NEW_OBJECT("IntList", size=8)
+    # Allocate object: IntList
+    li $a0, 8
+    li $v0, 9    # malloc
+    syscall
+    move $t0, $v0
+    sw $zero, 0($v0)
+    sw $zero, 4($v0)
+
+    # c_11 := Temp_34
+    sw $t0, c_11
+
+    # Allocate d_12
+    # Allocate d_12
+
+    # Temp_35 := NEW_OBJECT("IntList", size=8)
+    # Allocate object: IntList
+    li $a0, 8
+    li $v0, 9    # malloc
+    syscall
+    move $t0, $v0
+    sw $zero, 0($v0)
+    sw $zero, 4($v0)
+
+    # d_12 := Temp_35
+    sw $t0, d_12
+
+    # Allocate A_13
+    # Allocate A_13
+
+    # Temp_36 := NEW_OBJECT("IntList", size=8)
+    # Allocate object: IntList
+    li $a0, 8
+    li $v0, 9    # malloc
+    syscall
+    move $t0, $v0
+    sw $zero, 0($v0)
+    sw $zero, 4($v0)
+
+    # A_13 := Temp_36
+    sw $t0, A_13
+
+    # Allocate B_14
+    # Allocate B_14
+
+    # Temp_37 := NEW_OBJECT("IntList", size=8)
+    # Allocate object: IntList
+    li $a0, 8
+    li $v0, 9    # malloc
+    syscall
+    move $t0, $v0
+    sw $zero, 0($v0)
+    sw $zero, 4($v0)
+
+    # B_14 := Temp_37
+    sw $t0, B_14
+
+    # Allocate C_15
+    # Allocate C_15
+
+    # Temp_38 := NEW_OBJECT("IntList", size=8)
+    # Allocate object: IntList
+    li $a0, 8
+    li $v0, 9    # malloc
+    syscall
+    move $t0, $v0
+    sw $zero, 0($v0)
+    sw $zero, 4($v0)
+
+    # C_15 := Temp_38
+    sw $t0, C_15
+
+    # Allocate D_16
+    # Allocate D_16
+
+    # Temp_39 := NEW_OBJECT("IntList", size=8)
+    # Allocate object: IntList
+    li $a0, 8
+    li $v0, 9    # malloc
+    syscall
+    move $t0, $v0
+    sw $zero, 0($v0)
+    sw $zero, 4($v0)
+
+    # D_16 := Temp_39
+    sw $t0, D_16
+
+    # Temp_40 := 34
+    li $t1, 34
+
+    # Temp_41 := a_9
+    lw $t0, a_9
+
+    # FIELD_STORE(Temp_41.head, offset=0, Temp_40)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 0($t0)
+
+    # Temp_42 := 70
+    li $t1, 70
+
+    # Temp_43 := b_10
+    lw $t0, b_10
+
+    # FIELD_STORE(Temp_43.head, offset=0, Temp_42)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 0($t0)
+
+    # Temp_44 := 92
+    li $t0, 92
+
+    # Temp_45 := c_11
+    lw $t1, c_11
+
+    # FIELD_STORE(Temp_45.head, offset=0, Temp_44)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    sw $t0, 0($t1)
+
+    # Temp_46 := 96
+    li $t1, 96
+
+    # Temp_47 := d_12
+    lw $t0, d_12
+
+    # FIELD_STORE(Temp_47.head, offset=0, Temp_46)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 0($t0)
+
+    # Temp_48 := 12
+    li $t1, 12
+
+    # Temp_49 := A_13
+    lw $t0, A_13
+
+    # FIELD_STORE(Temp_49.head, offset=0, Temp_48)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 0($t0)
+
+    # Temp_50 := 50
+    li $t1, 50
+
+    # Temp_51 := B_14
+    lw $t0, B_14
+
+    # FIELD_STORE(Temp_51.head, offset=0, Temp_50)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 0($t0)
+
+    # Temp_52 := 97
+    li $t0, 97
+
+    # Temp_53 := C_15
+    lw $t1, C_15
+
+    # FIELD_STORE(Temp_53.head, offset=0, Temp_52)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    sw $t0, 0($t1)
+
+    # Temp_54 := 99
+    li $t1, 99
+
+    # Temp_55 := D_16
+    lw $t0, D_16
+
+    # FIELD_STORE(Temp_55.head, offset=0, Temp_54)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 0($t0)
+
+    # Temp_56 := b_10
+    lw $t1, b_10
+
+    # Temp_57 := a_9
+    lw $t0, a_9
+
+    # FIELD_STORE(Temp_57.tail, offset=4, Temp_56)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 4($t0)
+
+    # Temp_58 := c_11
+    lw $t0, c_11
+
+    # Temp_59 := b_10
+    lw $t1, b_10
+
+    # FIELD_STORE(Temp_59.tail, offset=4, Temp_58)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    sw $t0, 4($t1)
+
+    # Temp_60 := d_12
+    lw $t1, d_12
+
+    # Temp_61 := c_11
+    lw $t0, c_11
+
+    # FIELD_STORE(Temp_61.tail, offset=4, Temp_60)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 4($t0)
+
+    # Temp_62 := NIL
+    li $t1, 0    # nil = 0
+
+    # Temp_63 := d_12
+    lw $t0, d_12
+
+    # FIELD_STORE(Temp_63.tail, offset=4, Temp_62)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 4($t0)
+
+    # Temp_64 := B_14
+    lw $t0, B_14
+
+    # Temp_65 := A_13
+    lw $t1, A_13
+
+    # FIELD_STORE(Temp_65.tail, offset=4, Temp_64)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    sw $t0, 4($t1)
+
+    # Temp_66 := C_15
+    lw $t0, C_15
+
+    # Temp_67 := B_14
+    lw $t1, B_14
+
+    # FIELD_STORE(Temp_67.tail, offset=4, Temp_66)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    sw $t0, 4($t1)
+
+    # Temp_68 := D_16
+    lw $t0, D_16
+
+    # Temp_69 := C_15
+    lw $t1, C_15
+
+    # FIELD_STORE(Temp_69.tail, offset=4, Temp_68)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    sw $t0, 4($t1)
+
+    # Temp_70 := NIL
+    li $t1, 0    # nil = 0
+
+    # Temp_71 := D_16
+    lw $t0, D_16
+
+    # FIELD_STORE(Temp_71.tail, offset=4, Temp_70)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    sw $t1, 4($t0)
+
+    # Allocate l_17
+    # Allocate l_17
+
+    # Temp_72 := A_13
+    lw $t0, A_13
+
+    # l2_9 := Temp_72
+    sw $t0, l2_9
+
+    # Temp_73 := a_9
+    lw $t0, a_9
+
+    # l1_8 := Temp_73
+    # Save l1_8 before store (recursive call ahead)
+    addi $sp, $sp, -4    # allocate space
+    lw $t8, l1_8    # load current value
+    sw $t8, 0($sp)    # save on stack
+    sw $t0, l1_8
+
+    # Temp_74 := MergeLists()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal MergeLists
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+    # Restore l1_8 after call (from pre-store save)
+    lw $t8, 0($sp)    # load saved value
+    sw $t8, l1_8    # restore global
+    addi $sp, $sp, 4    # deallocate global save space
+
+    # l_17 := Temp_74
+    sw $t0, l_17
+
+Label_9_start:
+
+    # Temp_76 := 1
+    li $t0, 1
+
+    # Temp_78 := l_17
+    lw $t1, l_17
+
+    # Temp_79 := NIL
+    li $t2, 0    # nil = 0
+
+    # Temp_77 := Temp_78 == Temp_79
+    move $t8, $t1
+    li $t1, 0    # assume not equal
+    bne $t8, $t2, eq_done_5
+    li $t1, 1    # they are equal
+eq_done_5:
+
+    # Temp_75 := Temp_76 - Temp_77
+    # Saturated subtraction
+    sub $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_sub_max_6
+    li $t9, -32768
+    blt $t0, $t9, saturate_sub_min_7
+    j saturate_sub_done_8
+saturate_sub_max_6:
+    li $t0, 32767
+    j saturate_sub_done_8
+saturate_sub_min_7:
+    li $t0, -32768
+saturate_sub_done_8:
+
+    # JumpIfEqToZero Temp_75 Label_8_end
+    beq $t0, $zero, Label_8_end
+
+    # Temp_80 := l_17
+    lw $t0, l_17
+
+    # Temp_81 := FIELD_ACCESS(Temp_80.head, offset=0)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 0($t0)
+
+    # p_10 := Temp_81
+    sw $t0, p_10
+
+    # Temp_82 := PrintInt()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintInt
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Temp_83 := l_17
+    lw $t0, l_17
+
+    # Temp_84 := FIELD_ACCESS(Temp_83.tail, offset=4)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 4($t0)
+
+    # l_17 := Temp_84
+    sw $t0, l_17
+
+    # Jump Label_9_start
+    j Label_9_start
+
+Label_8_end:
+
+    # Exit program
+    li $v0, 10
+    syscall
+
+error_div_by_zero:
+    la $a0, msg_div_zero
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_null_pointer:
+    la $a0, msg_null_ptr
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_bounds:
+    la $a0, msg_bounds
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+PrintInt:
+    # Print integer (expects value in p_10 variable)
+    lw $a0, p_10    # load value to print
+    li $v0, 1    # syscall: print_int
+    syscall
+    li $a0, 32    # print space
+    li $v0, 11    # syscall: print_char
+    syscall
+    jr $ra    # return
+
+PrintString:
+    # Print string (expects value in p_10 variable)
+    lw $a0, p_10    # load string address to print
+    li $v0, 4    # syscall: print_string
+    syscall
+    jr $ra    # return
+
+# Program exit
+    li $v0, 10
+    syscall

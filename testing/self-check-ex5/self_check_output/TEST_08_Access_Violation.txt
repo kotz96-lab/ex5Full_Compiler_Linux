@@ -1,0 +1,262 @@
+.data
+msg_div_zero: .asciiz "Illegal Division By Zero"
+msg_null_ptr: .asciiz "Invalid Pointer Dereference"
+msg_bounds: .asciiz "Access Violation"
+moish_11: .word 0
+COMPILATION_12: .word 0
+TAU_13: .word 0
+
+.text
+.globl main
+
+main:
+    j __user_main    # Jump to main function
+__user_main:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Allocate moish_11
+    # Allocate moish_11
+
+    # Temp_0 := NEW_OBJECT("Student", size=28)
+    # Allocate object: Student
+    li $a0, 28
+    li $v0, 9    # malloc
+    syscall
+    move $t0, $v0
+    sw $zero, 0($v0)
+    sw $zero, 4($v0)
+    sw $zero, 8($v0)
+    sw $zero, 12($v0)
+    sw $zero, 16($v0)
+    sw $zero, 20($v0)
+    sw $zero, 24($v0)
+
+    # moish_11 := Temp_0
+    sw $t0, moish_11
+
+    # Temp_2 := 10
+    li $t0, 10
+
+    # Temp_1 := NEW_ARRAY(int[Temp_2], elemSize=4)
+    # Allocate array
+    li $s0, 4
+    mul $s0, $t0, $s0    # size * elemSize
+    addi $a0, $s0, 4    # +4 for length field
+    li $v0, 9    # malloc
+    syscall
+    sw $t0, 0($v0)    # store length
+    move $t0, $v0
+
+    # Temp_3 := moish_11
+    lw $t0, moish_11
+
+    # Temp_5 := 12
+    li $t0, 12
+
+    # Temp_4 := NEW_ARRAY(int[Temp_5], elemSize=4)
+    # Allocate array
+    li $s0, 4
+    mul $s0, $t0, $s0    # size * elemSize
+    addi $a0, $s0, 4    # +4 for length field
+    li $v0, 9    # malloc
+    syscall
+    sw $t0, 0($v0)    # store length
+    move $t0, $v0
+
+    # Temp_6 := moish_11
+    lw $t0, moish_11
+
+    # Allocate COMPILATION_12
+    # Allocate COMPILATION_12
+
+    # Temp_7 := 6
+    li $t0, 6
+
+    # COMPILATION_12 := Temp_7
+    sw $t0, COMPILATION_12
+
+    # Temp_8 := 99
+    li $t1, 99
+
+    # Temp_9 := moish_11
+    lw $t0, moish_11
+
+    # Temp_10 := FIELD_ACCESS(Temp_9.grades, offset=12)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t2, 12($t0)
+
+    # Temp_11 := COMPILATION_12
+    lw $t0, COMPILATION_12
+
+    # ARRAY_STORE(Temp_10[Temp_11], Temp_8, elemSize=4)
+    # Check array bounds
+    beq $t2, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t2)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2
+    addi $s0, $s0, 4
+    add $s0, $t2, $s0
+    sw $t1, 0($s0)
+
+    # Allocate TAU_13
+    # Allocate TAU_13
+
+    # Temp_13 := 37
+    li $t0, 37
+
+    # Temp_12 := NEW_ARRAY(int[Temp_13], elemSize=4)
+    # Allocate array
+    li $s0, 4
+    mul $s0, $t0, $s0    # size * elemSize
+    addi $a0, $s0, 4    # +4 for length field
+    li $v0, 9    # malloc
+    syscall
+    sw $t0, 0($v0)    # store length
+    move $t0, $v0
+
+    # TAU_13 := Temp_12
+    sw $t0, TAU_13
+
+    # Temp_14 := moish_11
+    lw $t1, moish_11
+
+    # Temp_15 := TAU_13
+    lw $t2, TAU_13
+
+    # Temp_16 := 3
+    li $t0, 3
+
+    # ARRAY_STORE(Temp_15[Temp_16], Temp_14, elemSize=4)
+    # Check array bounds
+    beq $t2, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t2)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2
+    addi $s0, $s0, 4
+    add $s0, $t2, $s0
+    sw $t1, 0($s0)
+
+    # Temp_17 := 999
+    li $t2, 999
+
+    # Temp_18 := TAU_13
+    lw $t1, TAU_13
+
+    # Temp_19 := 3
+    li $t0, 3
+
+    # Temp_20 := ARRAY_ACCESS(Temp_18[Temp_19], elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t1, $s0
+    lw $t0, 0($s0)
+
+    # Temp_21 := FIELD_ACCESS(Temp_20.lastYearSalaries, offset=8)
+    # Check null pointer
+    beq $t0, $zero, error_null_pointer
+    lw $t0, 8($t0)
+
+    # Temp_22 := TAU_13
+    lw $t3, TAU_13
+
+    # Temp_23 := 3
+    li $t1, 3
+
+    # Temp_24 := ARRAY_ACCESS(Temp_22[Temp_23], elemSize=4)
+    # Check array bounds
+    beq $t3, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t3)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t3, $s0
+    lw $t1, 0($s0)
+
+    # Temp_25 := FIELD_ACCESS(Temp_24.grades, offset=12)
+    # Check null pointer
+    beq $t1, $zero, error_null_pointer
+    lw $t3, 12($t1)
+
+    # Temp_26 := COMPILATION_12
+    lw $t1, COMPILATION_12
+
+    # Temp_27 := ARRAY_ACCESS(Temp_25[Temp_26], elemSize=4)
+    # Check array bounds
+    beq $t3, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t3)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t3, $s0
+    lw $t1, 0($s0)
+
+    # ARRAY_STORE(Temp_21[Temp_27], Temp_17, elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2
+    addi $s0, $s0, 4
+    add $s0, $t0, $s0
+    sw $t2, 0($s0)
+
+    # Exit program
+    li $v0, 10
+    syscall
+
+error_div_by_zero:
+    la $a0, msg_div_zero
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_null_pointer:
+    la $a0, msg_null_ptr
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_bounds:
+    la $a0, msg_bounds
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+PrintInt:
+    # Print integer (expects value in p_10 variable)
+    lw $a0, p_10    # load value to print
+    li $v0, 1    # syscall: print_int
+    syscall
+    li $a0, 32    # print space
+    li $v0, 11    # syscall: print_char
+    syscall
+    jr $ra    # return
+
+PrintString:
+    # Print string (expects value in p_10 variable)
+    lw $a0, p_10    # load string address to print
+    li $v0, 4    # syscall: print_string
+    syscall
+    jr $ra    # return
+
+# Program exit
+    li $v0, 10
+    syscall

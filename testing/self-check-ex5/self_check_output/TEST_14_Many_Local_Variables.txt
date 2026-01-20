@@ -1,0 +1,1016 @@
+.data
+msg_div_zero: .asciiz "Illegal Division By Zero"
+msg_null_ptr: .asciiz "Invalid Pointer Dereference"
+msg_bounds: .asciiz "Access Violation"
+i17_23: .word 0
+i15_21: .word 0
+i10_16: .word 0
+i12_18: .word 0
+i19_25: .word 0
+i31_37: .word 0
+i27_33: .word 0
+i25_31: .word 0
+i20_26: .word 0
+i22_28: .word 0
+i29_35: .word 0
+i06_12: .word 0
+i04_10: .word 0
+i08_14: .word 0
+i16_22: .word 0
+i14_20: .word 0
+i11_17: .word 0
+i13_19: .word 0
+i18_24: .word 0
+i30_36: .word 0
+i32_38: .word 0
+i26_32: .word 0
+i24_30: .word 0
+i03_9: .word 0
+i21_27: .word 0
+i28_34: .word 0
+i02_8: .word 0
+i07_13: .word 0
+i23_29: .word 0
+p_10: .word 0
+i05_11: .word 0
+i01_7: .word 0
+i09_15: .word 0
+
+.text
+.globl main
+
+main:
+    j __user_main    # Jump to main function
+foo:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Allocate i01_7
+    # Allocate i01_7
+
+    # Temp_0 := 1
+    li $t0, 1
+
+    # i01_7 := Temp_0
+    sw $t0, i01_7
+
+    # Allocate i02_8
+    # Allocate i02_8
+
+    # Temp_1 := 2
+    li $t0, 2
+
+    # i02_8 := Temp_1
+    sw $t0, i02_8
+
+    # Allocate i03_9
+    # Allocate i03_9
+
+    # Temp_2 := 3
+    li $t0, 3
+
+    # i03_9 := Temp_2
+    sw $t0, i03_9
+
+    # Allocate i04_10
+    # Allocate i04_10
+
+    # Temp_3 := 4
+    li $t0, 4
+
+    # i04_10 := Temp_3
+    sw $t0, i04_10
+
+    # Allocate i05_11
+    # Allocate i05_11
+
+    # Temp_4 := 5
+    li $t0, 5
+
+    # i05_11 := Temp_4
+    sw $t0, i05_11
+
+    # Allocate i06_12
+    # Allocate i06_12
+
+    # Temp_5 := 6
+    li $t0, 6
+
+    # i06_12 := Temp_5
+    sw $t0, i06_12
+
+    # Allocate i07_13
+    # Allocate i07_13
+
+    # Temp_6 := 7
+    li $t0, 7
+
+    # i07_13 := Temp_6
+    sw $t0, i07_13
+
+    # Allocate i08_14
+    # Allocate i08_14
+
+    # Temp_7 := 8
+    li $t0, 8
+
+    # i08_14 := Temp_7
+    sw $t0, i08_14
+
+    # Allocate i09_15
+    # Allocate i09_15
+
+    # Temp_8 := 9
+    li $t0, 9
+
+    # i09_15 := Temp_8
+    sw $t0, i09_15
+
+    # Allocate i10_16
+    # Allocate i10_16
+
+    # Temp_9 := 10
+    li $t0, 10
+
+    # i10_16 := Temp_9
+    sw $t0, i10_16
+
+    # Allocate i11_17
+    # Allocate i11_17
+
+    # Temp_10 := 11
+    li $t0, 11
+
+    # i11_17 := Temp_10
+    sw $t0, i11_17
+
+    # Allocate i12_18
+    # Allocate i12_18
+
+    # Temp_11 := 12
+    li $t0, 12
+
+    # i12_18 := Temp_11
+    sw $t0, i12_18
+
+    # Allocate i13_19
+    # Allocate i13_19
+
+    # Temp_12 := 13
+    li $t0, 13
+
+    # i13_19 := Temp_12
+    sw $t0, i13_19
+
+    # Allocate i14_20
+    # Allocate i14_20
+
+    # Temp_13 := 14
+    li $t0, 14
+
+    # i14_20 := Temp_13
+    sw $t0, i14_20
+
+    # Allocate i15_21
+    # Allocate i15_21
+
+    # Temp_14 := 15
+    li $t0, 15
+
+    # i15_21 := Temp_14
+    sw $t0, i15_21
+
+    # Allocate i16_22
+    # Allocate i16_22
+
+    # Temp_15 := 16
+    li $t0, 16
+
+    # i16_22 := Temp_15
+    sw $t0, i16_22
+
+    # Allocate i17_23
+    # Allocate i17_23
+
+    # Temp_16 := 17
+    li $t0, 17
+
+    # i17_23 := Temp_16
+    sw $t0, i17_23
+
+    # Allocate i18_24
+    # Allocate i18_24
+
+    # Temp_17 := 18
+    li $t0, 18
+
+    # i18_24 := Temp_17
+    sw $t0, i18_24
+
+    # Allocate i19_25
+    # Allocate i19_25
+
+    # Temp_18 := 19
+    li $t0, 19
+
+    # i19_25 := Temp_18
+    sw $t0, i19_25
+
+    # Allocate i20_26
+    # Allocate i20_26
+
+    # Temp_19 := 20
+    li $t0, 20
+
+    # i20_26 := Temp_19
+    sw $t0, i20_26
+
+    # Allocate i21_27
+    # Allocate i21_27
+
+    # Temp_20 := 21
+    li $t0, 21
+
+    # i21_27 := Temp_20
+    sw $t0, i21_27
+
+    # Allocate i22_28
+    # Allocate i22_28
+
+    # Temp_21 := 22
+    li $t0, 22
+
+    # i22_28 := Temp_21
+    sw $t0, i22_28
+
+    # Allocate i23_29
+    # Allocate i23_29
+
+    # Temp_22 := 23
+    li $t0, 23
+
+    # i23_29 := Temp_22
+    sw $t0, i23_29
+
+    # Allocate i24_30
+    # Allocate i24_30
+
+    # Temp_23 := 24
+    li $t0, 24
+
+    # i24_30 := Temp_23
+    sw $t0, i24_30
+
+    # Allocate i25_31
+    # Allocate i25_31
+
+    # Temp_24 := 25
+    li $t0, 25
+
+    # i25_31 := Temp_24
+    sw $t0, i25_31
+
+    # Allocate i26_32
+    # Allocate i26_32
+
+    # Temp_25 := 26
+    li $t0, 26
+
+    # i26_32 := Temp_25
+    sw $t0, i26_32
+
+    # Allocate i27_33
+    # Allocate i27_33
+
+    # Temp_26 := 27
+    li $t0, 27
+
+    # i27_33 := Temp_26
+    sw $t0, i27_33
+
+    # Allocate i28_34
+    # Allocate i28_34
+
+    # Temp_27 := 28
+    li $t0, 28
+
+    # i28_34 := Temp_27
+    sw $t0, i28_34
+
+    # Allocate i29_35
+    # Allocate i29_35
+
+    # Temp_28 := 29
+    li $t0, 29
+
+    # i29_35 := Temp_28
+    sw $t0, i29_35
+
+    # Allocate i30_36
+    # Allocate i30_36
+
+    # Temp_29 := 30
+    li $t0, 30
+
+    # i30_36 := Temp_29
+    sw $t0, i30_36
+
+    # Allocate i31_37
+    # Allocate i31_37
+
+    # Temp_30 := 31
+    li $t0, 31
+
+    # i31_37 := Temp_30
+    sw $t0, i31_37
+
+    # Allocate i32_38
+    # Allocate i32_38
+
+    # Temp_31 := 32
+    li $t0, 32
+
+    # i32_38 := Temp_31
+    sw $t0, i32_38
+
+    # Temp_63 := i01_7
+    lw $t1, i01_7
+
+    # Temp_64 := i02_8
+    lw $t0, i02_8
+
+    # Temp_62 := Temp_63 + Temp_64
+    # Saturated addition
+    add $t1, $t1, $t0
+    li $t9, 32767
+    bgt $t1, $t9, saturate_add_max_0
+    li $t9, -32768
+    blt $t1, $t9, saturate_add_min_1
+    j saturate_add_done_2
+saturate_add_max_0:
+    li $t1, 32767
+    j saturate_add_done_2
+saturate_add_min_1:
+    li $t1, -32768
+saturate_add_done_2:
+
+    # Temp_65 := i03_9
+    lw $t0, i03_9
+
+    # Temp_61 := Temp_62 + Temp_65
+    # Saturated addition
+    add $t1, $t1, $t0
+    li $t9, 32767
+    bgt $t1, $t9, saturate_add_max_3
+    li $t9, -32768
+    blt $t1, $t9, saturate_add_min_4
+    j saturate_add_done_5
+saturate_add_max_3:
+    li $t1, 32767
+    j saturate_add_done_5
+saturate_add_min_4:
+    li $t1, -32768
+saturate_add_done_5:
+
+    # Temp_66 := i04_10
+    lw $t0, i04_10
+
+    # Temp_60 := Temp_61 + Temp_66
+    # Saturated addition
+    add $t1, $t1, $t0
+    li $t9, 32767
+    bgt $t1, $t9, saturate_add_max_6
+    li $t9, -32768
+    blt $t1, $t9, saturate_add_min_7
+    j saturate_add_done_8
+saturate_add_max_6:
+    li $t1, 32767
+    j saturate_add_done_8
+saturate_add_min_7:
+    li $t1, -32768
+saturate_add_done_8:
+
+    # Temp_67 := i05_11
+    lw $t0, i05_11
+
+    # Temp_59 := Temp_60 + Temp_67
+    # Saturated addition
+    add $t1, $t1, $t0
+    li $t9, 32767
+    bgt $t1, $t9, saturate_add_max_9
+    li $t9, -32768
+    blt $t1, $t9, saturate_add_min_10
+    j saturate_add_done_11
+saturate_add_max_9:
+    li $t1, 32767
+    j saturate_add_done_11
+saturate_add_min_10:
+    li $t1, -32768
+saturate_add_done_11:
+
+    # Temp_68 := i06_12
+    lw $t0, i06_12
+
+    # Temp_58 := Temp_59 + Temp_68
+    # Saturated addition
+    add $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_12
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_13
+    j saturate_add_done_14
+saturate_add_max_12:
+    li $t0, 32767
+    j saturate_add_done_14
+saturate_add_min_13:
+    li $t0, -32768
+saturate_add_done_14:
+
+    # Temp_69 := i07_13
+    lw $t1, i07_13
+
+    # Temp_57 := Temp_58 + Temp_69
+    # Saturated addition
+    add $t1, $t0, $t1
+    li $t9, 32767
+    bgt $t1, $t9, saturate_add_max_15
+    li $t9, -32768
+    blt $t1, $t9, saturate_add_min_16
+    j saturate_add_done_17
+saturate_add_max_15:
+    li $t1, 32767
+    j saturate_add_done_17
+saturate_add_min_16:
+    li $t1, -32768
+saturate_add_done_17:
+
+    # Temp_70 := i08_14
+    lw $t0, i08_14
+
+    # Temp_56 := Temp_57 + Temp_70
+    # Saturated addition
+    add $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_18
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_19
+    j saturate_add_done_20
+saturate_add_max_18:
+    li $t0, 32767
+    j saturate_add_done_20
+saturate_add_min_19:
+    li $t0, -32768
+saturate_add_done_20:
+
+    # Temp_71 := i09_15
+    lw $t1, i09_15
+
+    # Temp_55 := Temp_56 + Temp_71
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_21
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_22
+    j saturate_add_done_23
+saturate_add_max_21:
+    li $t0, 32767
+    j saturate_add_done_23
+saturate_add_min_22:
+    li $t0, -32768
+saturate_add_done_23:
+
+    # Temp_72 := i10_16
+    lw $t1, i10_16
+
+    # Temp_54 := Temp_55 + Temp_72
+    # Saturated addition
+    add $t1, $t0, $t1
+    li $t9, 32767
+    bgt $t1, $t9, saturate_add_max_24
+    li $t9, -32768
+    blt $t1, $t9, saturate_add_min_25
+    j saturate_add_done_26
+saturate_add_max_24:
+    li $t1, 32767
+    j saturate_add_done_26
+saturate_add_min_25:
+    li $t1, -32768
+saturate_add_done_26:
+
+    # Temp_73 := i11_17
+    lw $t0, i11_17
+
+    # Temp_53 := Temp_54 + Temp_73
+    # Saturated addition
+    add $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_27
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_28
+    j saturate_add_done_29
+saturate_add_max_27:
+    li $t0, 32767
+    j saturate_add_done_29
+saturate_add_min_28:
+    li $t0, -32768
+saturate_add_done_29:
+
+    # Temp_74 := i12_18
+    lw $t1, i12_18
+
+    # Temp_52 := Temp_53 + Temp_74
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_30
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_31
+    j saturate_add_done_32
+saturate_add_max_30:
+    li $t0, 32767
+    j saturate_add_done_32
+saturate_add_min_31:
+    li $t0, -32768
+saturate_add_done_32:
+
+    # Temp_75 := i13_19
+    lw $t1, i13_19
+
+    # Temp_51 := Temp_52 + Temp_75
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_33
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_34
+    j saturate_add_done_35
+saturate_add_max_33:
+    li $t0, 32767
+    j saturate_add_done_35
+saturate_add_min_34:
+    li $t0, -32768
+saturate_add_done_35:
+
+    # Temp_76 := i14_20
+    lw $t1, i14_20
+
+    # Temp_50 := Temp_51 + Temp_76
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_36
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_37
+    j saturate_add_done_38
+saturate_add_max_36:
+    li $t0, 32767
+    j saturate_add_done_38
+saturate_add_min_37:
+    li $t0, -32768
+saturate_add_done_38:
+
+    # Temp_77 := i15_21
+    lw $t1, i15_21
+
+    # Temp_49 := Temp_50 + Temp_77
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_39
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_40
+    j saturate_add_done_41
+saturate_add_max_39:
+    li $t0, 32767
+    j saturate_add_done_41
+saturate_add_min_40:
+    li $t0, -32768
+saturate_add_done_41:
+
+    # Temp_78 := i16_22
+    lw $t1, i16_22
+
+    # Temp_48 := Temp_49 + Temp_78
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_42
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_43
+    j saturate_add_done_44
+saturate_add_max_42:
+    li $t0, 32767
+    j saturate_add_done_44
+saturate_add_min_43:
+    li $t0, -32768
+saturate_add_done_44:
+
+    # Temp_79 := i17_23
+    lw $t1, i17_23
+
+    # Temp_47 := Temp_48 + Temp_79
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_45
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_46
+    j saturate_add_done_47
+saturate_add_max_45:
+    li $t0, 32767
+    j saturate_add_done_47
+saturate_add_min_46:
+    li $t0, -32768
+saturate_add_done_47:
+
+    # Temp_80 := i18_24
+    lw $t1, i18_24
+
+    # Temp_46 := Temp_47 + Temp_80
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_48
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_49
+    j saturate_add_done_50
+saturate_add_max_48:
+    li $t0, 32767
+    j saturate_add_done_50
+saturate_add_min_49:
+    li $t0, -32768
+saturate_add_done_50:
+
+    # Temp_81 := i19_25
+    lw $t1, i19_25
+
+    # Temp_45 := Temp_46 + Temp_81
+    # Saturated addition
+    add $t1, $t0, $t1
+    li $t9, 32767
+    bgt $t1, $t9, saturate_add_max_51
+    li $t9, -32768
+    blt $t1, $t9, saturate_add_min_52
+    j saturate_add_done_53
+saturate_add_max_51:
+    li $t1, 32767
+    j saturate_add_done_53
+saturate_add_min_52:
+    li $t1, -32768
+saturate_add_done_53:
+
+    # Temp_82 := i20_26
+    lw $t0, i20_26
+
+    # Temp_44 := Temp_45 + Temp_82
+    # Saturated addition
+    add $t1, $t1, $t0
+    li $t9, 32767
+    bgt $t1, $t9, saturate_add_max_54
+    li $t9, -32768
+    blt $t1, $t9, saturate_add_min_55
+    j saturate_add_done_56
+saturate_add_max_54:
+    li $t1, 32767
+    j saturate_add_done_56
+saturate_add_min_55:
+    li $t1, -32768
+saturate_add_done_56:
+
+    # Temp_83 := i21_27
+    lw $t0, i21_27
+
+    # Temp_43 := Temp_44 + Temp_83
+    # Saturated addition
+    add $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_57
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_58
+    j saturate_add_done_59
+saturate_add_max_57:
+    li $t0, 32767
+    j saturate_add_done_59
+saturate_add_min_58:
+    li $t0, -32768
+saturate_add_done_59:
+
+    # Temp_84 := i22_28
+    lw $t1, i22_28
+
+    # Temp_42 := Temp_43 + Temp_84
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_60
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_61
+    j saturate_add_done_62
+saturate_add_max_60:
+    li $t0, 32767
+    j saturate_add_done_62
+saturate_add_min_61:
+    li $t0, -32768
+saturate_add_done_62:
+
+    # Temp_85 := i23_29
+    lw $t1, i23_29
+
+    # Temp_41 := Temp_42 + Temp_85
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_63
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_64
+    j saturate_add_done_65
+saturate_add_max_63:
+    li $t0, 32767
+    j saturate_add_done_65
+saturate_add_min_64:
+    li $t0, -32768
+saturate_add_done_65:
+
+    # Temp_86 := i24_30
+    lw $t1, i24_30
+
+    # Temp_40 := Temp_41 + Temp_86
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_66
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_67
+    j saturate_add_done_68
+saturate_add_max_66:
+    li $t0, 32767
+    j saturate_add_done_68
+saturate_add_min_67:
+    li $t0, -32768
+saturate_add_done_68:
+
+    # Temp_87 := i25_31
+    lw $t1, i25_31
+
+    # Temp_39 := Temp_40 + Temp_87
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_69
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_70
+    j saturate_add_done_71
+saturate_add_max_69:
+    li $t0, 32767
+    j saturate_add_done_71
+saturate_add_min_70:
+    li $t0, -32768
+saturate_add_done_71:
+
+    # Temp_88 := i26_32
+    lw $t1, i26_32
+
+    # Temp_38 := Temp_39 + Temp_88
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_72
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_73
+    j saturate_add_done_74
+saturate_add_max_72:
+    li $t0, 32767
+    j saturate_add_done_74
+saturate_add_min_73:
+    li $t0, -32768
+saturate_add_done_74:
+
+    # Temp_89 := i27_33
+    lw $t1, i27_33
+
+    # Temp_37 := Temp_38 + Temp_89
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_75
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_76
+    j saturate_add_done_77
+saturate_add_max_75:
+    li $t0, 32767
+    j saturate_add_done_77
+saturate_add_min_76:
+    li $t0, -32768
+saturate_add_done_77:
+
+    # Temp_90 := i28_34
+    lw $t1, i28_34
+
+    # Temp_36 := Temp_37 + Temp_90
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_78
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_79
+    j saturate_add_done_80
+saturate_add_max_78:
+    li $t0, 32767
+    j saturate_add_done_80
+saturate_add_min_79:
+    li $t0, -32768
+saturate_add_done_80:
+
+    # Temp_91 := i29_35
+    lw $t1, i29_35
+
+    # Temp_35 := Temp_36 + Temp_91
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_81
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_82
+    j saturate_add_done_83
+saturate_add_max_81:
+    li $t0, 32767
+    j saturate_add_done_83
+saturate_add_min_82:
+    li $t0, -32768
+saturate_add_done_83:
+
+    # Temp_92 := i30_36
+    lw $t1, i30_36
+
+    # Temp_34 := Temp_35 + Temp_92
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_84
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_85
+    j saturate_add_done_86
+saturate_add_max_84:
+    li $t0, 32767
+    j saturate_add_done_86
+saturate_add_min_85:
+    li $t0, -32768
+saturate_add_done_86:
+
+    # Temp_93 := i31_37
+    lw $t1, i31_37
+
+    # Temp_33 := Temp_34 + Temp_93
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_87
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_88
+    j saturate_add_done_89
+saturate_add_max_87:
+    li $t0, 32767
+    j saturate_add_done_89
+saturate_add_min_88:
+    li $t0, -32768
+saturate_add_done_89:
+
+    # Temp_94 := i32_38
+    lw $t1, i32_38
+
+    # Temp_32 := Temp_33 + Temp_94
+    # Saturated addition
+    add $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_90
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_91
+    j saturate_add_done_92
+saturate_add_max_90:
+    li $t0, 32767
+    j saturate_add_done_92
+saturate_add_min_91:
+    li $t0, -32768
+saturate_add_done_92:
+
+    # RETURN Temp_32
+    move $v0, $t0    # return value
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+__user_main:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Temp_95 := foo()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal foo
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # p_10 := Temp_95
+    sw $t0, p_10
+
+    # Temp_96 := PrintInt()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintInt
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Exit program
+    li $v0, 10
+    syscall
+
+error_div_by_zero:
+    la $a0, msg_div_zero
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_null_pointer:
+    la $a0, msg_null_ptr
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_bounds:
+    la $a0, msg_bounds
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+PrintInt:
+    # Print integer (expects value in p_10 variable)
+    lw $a0, p_10    # load value to print
+    li $v0, 1    # syscall: print_int
+    syscall
+    li $a0, 32    # print space
+    li $v0, 11    # syscall: print_char
+    syscall
+    jr $ra    # return
+
+PrintString:
+    # Print string (expects value in p_10 variable)
+    lw $a0, p_10    # load string address to print
+    li $v0, 4    # syscall: print_string
+    syscall
+    jr $ra    # return
+
+# Program exit
+    li $v0, 10
+    syscall

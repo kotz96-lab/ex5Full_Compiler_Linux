@@ -1,0 +1,250 @@
+.data
+msg_div_zero: .asciiz "Illegal Division By Zero"
+msg_null_ptr: .asciiz "Invalid Pointer Dereference"
+msg_bounds: .asciiz "Access Violation"
+n_7: .word 0
+p_10: .word 0
+
+.text
+.globl main
+
+main:
+    j __user_main    # Jump to main function
+g:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Allocate n_7
+    # Allocate n_7
+
+    # Temp_0 := n_7
+    lw $t0, n_7
+
+    # p_10 := Temp_0
+    sw $t0, p_10
+
+    # Temp_1 := PrintInt()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintInt
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Temp_3 := n_7
+    lw $t1, n_7
+
+    # Temp_4 := 2
+    li $t0, 2
+
+    # Temp_2 := Temp_3 == Temp_4
+    move $t9, $t0
+    li $t0, 0    # assume not equal
+    bne $t1, $t9, eq_done_1
+    li $t0, 1    # they are equal
+eq_done_1:
+
+    # JumpIfEqToZero Temp_2 Label_1_end
+    beq $t0, $zero, Label_1_end
+
+    # RETURN_VOID
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+Label_1_end:
+
+    # Temp_6 := n_7
+    lw $t0, n_7
+
+    # Temp_7 := 1
+    li $t1, 1
+
+    # Temp_5 := Temp_6 - Temp_7
+    # Saturated subtraction
+    sub $t0, $t0, $t1
+    li $t9, 32767
+    bgt $t0, $t9, saturate_sub_max_2
+    li $t9, -32768
+    blt $t0, $t9, saturate_sub_min_3
+    j saturate_sub_done_4
+saturate_sub_max_2:
+    li $t0, 32767
+    j saturate_sub_done_4
+saturate_sub_min_3:
+    li $t0, -32768
+saturate_sub_done_4:
+
+    # n_7 := Temp_5
+    # Save n_7 before store (recursive call ahead)
+    addi $sp, $sp, -4    # allocate space
+    lw $t8, n_7    # load current value
+    sw $t8, 0($sp)    # save on stack
+    sw $t0, n_7
+
+    # Temp_8 := g()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal g
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+    # Restore n_7 after call (from pre-store save)
+    lw $t8, 0($sp)    # load saved value
+    sw $t8, n_7    # restore global
+    addi $sp, $sp, 4    # deallocate global save space
+
+__user_main:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Temp_10 := 3
+    li $t1, 3
+
+    # Temp_11 := 1
+    li $t0, 1
+
+    # Temp_9 := Temp_10 - Temp_11
+    # Saturated subtraction
+    sub $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_sub_max_5
+    li $t9, -32768
+    blt $t0, $t9, saturate_sub_min_6
+    j saturate_sub_done_7
+saturate_sub_max_5:
+    li $t0, 32767
+    j saturate_sub_done_7
+saturate_sub_min_6:
+    li $t0, -32768
+saturate_sub_done_7:
+
+    # n_7 := Temp_9
+    # Save n_7 before store (recursive call ahead)
+    addi $sp, $sp, -4    # allocate space
+    lw $t8, n_7    # load current value
+    sw $t8, 0($sp)    # save on stack
+    sw $t0, n_7
+
+    # Temp_12 := g()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal g
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+    # Restore n_7 after call (from pre-store save)
+    lw $t8, 0($sp)    # load saved value
+    sw $t8, n_7    # restore global
+    addi $sp, $sp, 4    # deallocate global save space
+
+    # Exit program
+    li $v0, 10
+    syscall
+
+error_div_by_zero:
+    la $a0, msg_div_zero
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_null_pointer:
+    la $a0, msg_null_ptr
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_bounds:
+    la $a0, msg_bounds
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+PrintInt:
+    # Print integer (expects value in p_10 variable)
+    lw $a0, p_10    # load value to print
+    li $v0, 1    # syscall: print_int
+    syscall
+    li $a0, 32    # print space
+    li $v0, 11    # syscall: print_char
+    syscall
+    jr $ra    # return
+
+PrintString:
+    # Print string (expects value in p_10 variable)
+    lw $a0, p_10    # load string address to print
+    li $v0, 4    # syscall: print_string
+    syscall
+    jr $ra    # return
+
+# Program exit
+    li $v0, 10
+    syscall

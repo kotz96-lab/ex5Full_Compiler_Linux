@@ -1,0 +1,386 @@
+.data
+msg_div_zero: .asciiz "Illegal Division By Zero"
+msg_null_ptr: .asciiz "Invalid Pointer Dereference"
+msg_bounds: .asciiz "Access Violation"
+string_2: .asciiz "that"
+string_3: .asciiz "Citroen"
+string_1: .asciiz "said"
+string_0: .asciiz "Having"
+s1_5: .word 0
+s2_6: .word 0
+names_11: .word 0
+p_10: .word 0
+s3_7: .word 0
+
+.text
+.globl main
+
+main:
+    # Allocate s1_5
+    # Allocate s1_5
+
+    # Temp_0 := "Having"
+    la $t0, string_0
+
+    # s1_5 := Temp_0
+    sw $t0, s1_5
+
+    # Allocate s2_6
+    # Allocate s2_6
+
+    # Temp_1 := "said"
+    la $t0, string_1
+
+    # s2_6 := Temp_1
+    sw $t0, s2_6
+
+    # Allocate s3_7
+    # Allocate s3_7
+
+    # Temp_2 := "that"
+    la $t0, string_2
+
+    # s3_7 := Temp_2
+    sw $t0, s3_7
+
+    j __user_main    # Jump to main function
+__user_main:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Allocate names_11
+    # Allocate names_11
+
+    # Temp_4 := 3
+    li $t0, 3
+
+    # Temp_3 := NEW_ARRAY(int[Temp_4], elemSize=4)
+    # Allocate array
+    li $s0, 4
+    mul $s0, $t0, $s0    # size * elemSize
+    addi $a0, $s0, 4    # +4 for length field
+    li $v0, 9    # malloc
+    syscall
+    sw $t0, 0($v0)    # store length
+    move $t0, $v0
+
+    # names_11 := Temp_3
+    sw $t0, names_11
+
+    # Temp_5 := s1_5
+    lw $t0, s1_5
+
+    # Temp_6 := names_11
+    lw $t1, names_11
+
+    # Temp_7 := 0
+    li $t2, 0
+
+    # ARRAY_STORE(Temp_6[Temp_7], Temp_5, elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t2, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t2, $s0, error_bounds
+    sll $s0, $t2, 2
+    addi $s0, $s0, 4
+    add $s0, $t1, $s0
+    sw $t0, 0($s0)
+
+    # Temp_9 := "Citroen"
+    la $t0, string_3
+
+    # Temp_10 := s2_6
+    lw $t1, s2_6
+
+    # Temp_8 := STRING_CONCAT(Temp_9, Temp_10)
+    move $s4, $t0
+    move $s5, $t1
+    # Calculate strlen(str1)
+    li $s0, 0
+    move $s2, $s4
+strlen1_loop_0:
+    lb $t8, 0($s2)
+    beq $t8, $zero, strlen1_done_1
+    addi $s0, $s0, 1
+    addi $s2, $s2, 1
+    j strlen1_loop_0
+strlen1_done_1:
+    # Calculate strlen(str2)
+    li $s1, 0
+    move $s2, $s5
+strlen2_loop_2:
+    lb $t8, 0($s2)
+    beq $t8, $zero, strlen2_done_3
+    addi $s1, $s1, 1
+    addi $s2, $s2, 1
+    j strlen2_loop_2
+strlen2_done_3:
+    # Allocate memory for concatenated string
+    add $a0, $s0, $s1
+    addi $a0, $a0, 1    # +1 for null terminator
+    li $v0, 9    # malloc syscall
+    syscall
+    move $t1, $v0
+    # Copy str1
+    move $s2, $t1
+    move $s3, $s4
+strcpy1_loop_4:
+    lb $t8, 0($s3)
+    beq $t8, $zero, strcpy1_done_5
+    sb $t8, 0($s2)
+    addi $s2, $s2, 1
+    addi $s3, $s3, 1
+    j strcpy1_loop_4
+strcpy1_done_5:
+    # Copy str2
+    move $s3, $s5
+strcpy2_loop_6:
+    lb $t8, 0($s3)
+    sb $t8, 0($s2)
+    beq $t8, $zero, strcpy2_done_7
+    addi $s2, $s2, 1
+    addi $s3, $s3, 1
+    j strcpy2_loop_6
+strcpy2_done_7:
+
+    # Temp_11 := names_11
+    lw $t0, names_11
+
+    # Temp_12 := 1
+    li $t2, 1
+
+    # ARRAY_STORE(Temp_11[Temp_12], Temp_8, elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t2, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t2, $s0, error_bounds
+    sll $s0, $t2, 2
+    addi $s0, $s0, 4
+    add $s0, $t0, $s0
+    sw $t1, 0($s0)
+
+    # Temp_15 := s1_5
+    lw $t0, s1_5
+
+    # Temp_16 := "said"
+    la $t1, string_1
+
+    # Temp_14 := STRING_CONCAT(Temp_15, Temp_16)
+    move $s4, $t0
+    move $s5, $t1
+    # Calculate strlen(str1)
+    li $s0, 0
+    move $s2, $s4
+strlen1_loop_8:
+    lb $t8, 0($s2)
+    beq $t8, $zero, strlen1_done_9
+    addi $s0, $s0, 1
+    addi $s2, $s2, 1
+    j strlen1_loop_8
+strlen1_done_9:
+    # Calculate strlen(str2)
+    li $s1, 0
+    move $s2, $s5
+strlen2_loop_10:
+    lb $t8, 0($s2)
+    beq $t8, $zero, strlen2_done_11
+    addi $s1, $s1, 1
+    addi $s2, $s2, 1
+    j strlen2_loop_10
+strlen2_done_11:
+    # Allocate memory for concatenated string
+    add $a0, $s0, $s1
+    addi $a0, $a0, 1    # +1 for null terminator
+    li $v0, 9    # malloc syscall
+    syscall
+    move $t1, $v0
+    # Copy str1
+    move $s2, $t1
+    move $s3, $s4
+strcpy1_loop_12:
+    lb $t8, 0($s3)
+    beq $t8, $zero, strcpy1_done_13
+    sb $t8, 0($s2)
+    addi $s2, $s2, 1
+    addi $s3, $s3, 1
+    j strcpy1_loop_12
+strcpy1_done_13:
+    # Copy str2
+    move $s3, $s5
+strcpy2_loop_14:
+    lb $t8, 0($s3)
+    sb $t8, 0($s2)
+    beq $t8, $zero, strcpy2_done_15
+    addi $s2, $s2, 1
+    addi $s3, $s3, 1
+    j strcpy2_loop_14
+strcpy2_done_15:
+
+    # Temp_17 := s3_7
+    lw $t0, s3_7
+
+    # Temp_13 := STRING_CONCAT(Temp_14, Temp_17)
+    move $s4, $t1
+    move $s5, $t0
+    # Calculate strlen(str1)
+    li $s0, 0
+    move $s2, $s4
+strlen1_loop_16:
+    lb $t8, 0($s2)
+    beq $t8, $zero, strlen1_done_17
+    addi $s0, $s0, 1
+    addi $s2, $s2, 1
+    j strlen1_loop_16
+strlen1_done_17:
+    # Calculate strlen(str2)
+    li $s1, 0
+    move $s2, $s5
+strlen2_loop_18:
+    lb $t8, 0($s2)
+    beq $t8, $zero, strlen2_done_19
+    addi $s1, $s1, 1
+    addi $s2, $s2, 1
+    j strlen2_loop_18
+strlen2_done_19:
+    # Allocate memory for concatenated string
+    add $a0, $s0, $s1
+    addi $a0, $a0, 1    # +1 for null terminator
+    li $v0, 9    # malloc syscall
+    syscall
+    move $t2, $v0
+    # Copy str1
+    move $s2, $t2
+    move $s3, $s4
+strcpy1_loop_20:
+    lb $t8, 0($s3)
+    beq $t8, $zero, strcpy1_done_21
+    sb $t8, 0($s2)
+    addi $s2, $s2, 1
+    addi $s3, $s3, 1
+    j strcpy1_loop_20
+strcpy1_done_21:
+    # Copy str2
+    move $s3, $s5
+strcpy2_loop_22:
+    lb $t8, 0($s3)
+    sb $t8, 0($s2)
+    beq $t8, $zero, strcpy2_done_23
+    addi $s2, $s2, 1
+    addi $s3, $s3, 1
+    j strcpy2_loop_22
+strcpy2_done_23:
+
+    # Temp_18 := names_11
+    lw $t1, names_11
+
+    # Temp_19 := 2
+    li $t0, 2
+
+    # ARRAY_STORE(Temp_18[Temp_19], Temp_13, elemSize=4)
+    # Check array bounds
+    beq $t1, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2
+    addi $s0, $s0, 4
+    add $s0, $t1, $s0
+    sw $t2, 0($s0)
+
+    # Temp_20 := names_11
+    lw $t0, names_11
+
+    # Temp_21 := 2
+    li $t1, 2
+
+    # Temp_22 := ARRAY_ACCESS(Temp_20[Temp_21], elemSize=4)
+    # Check array bounds
+    beq $t0, $zero, error_null_pointer
+    bltz $t1, error_bounds
+    lw $s0, 0($t0)    # load array length
+    bge $t1, $s0, error_bounds
+    sll $s0, $t1, 2    # index * 4
+    addi $s0, $s0, 4    # + 4 (skip length)
+    add $s0, $t0, $s0
+    lw $t0, 0($s0)
+
+    # p_10 := Temp_22
+    sw $t0, p_10
+
+    # Temp_23 := PrintString()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintString
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Exit program
+    li $v0, 10
+    syscall
+
+error_div_by_zero:
+    la $a0, msg_div_zero
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_null_pointer:
+    la $a0, msg_null_ptr
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+error_bounds:
+    la $a0, msg_bounds
+    li $v0, 4
+    syscall
+    li $v0, 10
+    syscall
+
+PrintInt:
+    # Print integer (expects value in p_10 variable)
+    lw $a0, p_10    # load value to print
+    li $v0, 1    # syscall: print_int
+    syscall
+    li $a0, 32    # print space
+    li $v0, 11    # syscall: print_char
+    syscall
+    jr $ra    # return
+
+PrintString:
+    # Print string (expects value in p_10 variable)
+    lw $a0, p_10    # load string address to print
+    li $v0, 4    # syscall: print_string
+    syscall
+    jr $ra    # return
+
+# Program exit
+    li $v0, 10
+    syscall
