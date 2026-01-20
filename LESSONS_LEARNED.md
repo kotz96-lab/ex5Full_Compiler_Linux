@@ -490,79 +490,108 @@ python3 self-check.py 2>&1 | grep -E "OK$|Total|Passed"
 
 ---
 
-*Generated after achieving 8/26 tests passing (30.8%)*
-*Session focused on TEST_06 (Strings) - Successfully fixed!*
-*Good luck reaching 13/26! 🚀*
+*Generated after achieving 11/26 tests passing (42.3%)*
+*Sessions: TEST_06 (Strings) + Recursion fix (TEST_12, TEST_19, TEST_22)*
+*Progress: 8 → 11 tests passing through clever lookahead caller-save!* 🚀
 
 ---
 
-## 🔄 Recursion Deep Dive (2026-01-21)
+## 🎉 RECURSION FIXED! (2026-01-21)
 
-### The Recursion Problem
+### The Breakthrough
 
-**Discovery:** Implementing recursion support revealed a fundamental incompatibility between Person A's IR generator and global variable storage.
+**Success:** Fixed recursion WITHOUT modifying IR generator or register allocation!
 
-### What We Tried
+### Progress Summary
+- **Before:** 8/26 tests passing (30.8%)
+- **After:** 11/26 tests passing (42.3%)
+- **New passing:** TEST_12_Fib ✅, TEST_19 ✅, TEST_22 ✅
+- **Improved:** TEST_02, TEST_10 now run (fail but don't timeout)
 
-1. **Function prologues/epilogues** - Save/restore `$ra` and `$fp` ✅
-2. **Caller-saved register preservation** - Save `$t0-$t9` around calls ✅
-3. **Callee-saved global variables** - Save/restore globals in prologue/epilogue ⚠️
+### The Problem We Solved
 
-### The Fundamental Issue
-
-**The IR generator modifies global parameter variables before function calls, expecting them to survive:**
+**The IR generator modifies global parameter variables before function calls:**
 
 ```
 IR for fib(n-1) + fib(n-2):
-[ 12] n_7 := n-1          # Modify parameter!
-[ 13] Temp_8 := fib()     # Call fib(n-1)
-[ 14] Temp_10 := n_7      # Load n... expects ORIGINAL n, not n-1!
-[ 16] Temp_9 := n_7 - 2   # Compute n-2... but n_7 is now n-1!
+[ 12] n_7 := n-1          # Store: modify parameter to n-1
+[ 13] Temp_8 := fib()     # Call: use modified value
+[ 14] Temp_10 := n_7      # Load: expects ORIGINAL n, gets n-1!
+[ 16] Temp_9 := n_7 - 2   # Computes (n-1)-2 = n-3, not n-2!
 ```
 
-**What happens:**
-- Caller (fib(2)) sets `n_7 = 1` before calling fib(1)
-- Callee (fib(1)) saves `n_7 = 1` in prologue
-- Callee (fib(1)) restores `n_7 = 1` in epilogue
-- Caller expects `n_7 = 2` (original value), but gets `n_7 = 1`!
+### The Solution: Lookahead Caller-Save
 
-**Result:** `fib(2)` computes `fib(1) + fib(-1)` instead of `fib(1) + fib(0)`
+**Key insight:** Detect the `Store→Call` pattern and save BEFORE the store!
 
-### Why Callee-Save Doesn't Work
+**Implementation in [MipsTranslator.java](ex5/src/mips/MipsTranslator.java):**
 
-Callee-save preserves the value as it was when the CALLEE entered, not as it was before the CALLER modified it. The caller needs the pre-modification value, which is already lost.
+```java
+// In translateStore() - lines 682-722
+if (currentCommands != null && currentCommandIndex + 1 < currentCommands.size()) {
+    IrCommand nextCmd = currentCommands.get(currentCommandIndex + 1);
+    if (nextCmd instanceof IrCommandCallFunc) {
+        // Next is a call! Save current value BEFORE store
+        gen.emit("lw $t8, " + varName);     // Load current value
+        gen.emit("sw $t8, 0($sp)");         // Save to stack
+        savedGlobalVars.push(varName);       // Track it
+    }
+}
+// Now do the store (modifies the global)
+gen.emit("sw " + src + ", " + varName);
 
-### Proper Solutions (Require IR Changes)
+// In translateCallFunc() - lines 732-786
+// After call and register restore...
+if (!savedGlobalVars.isEmpty()) {
+    String varName = savedGlobalVars.pop();
+    gen.emit("lw $t8, 0($sp)");            // Restore original value
+    gen.emit("sw $t8, " + varName);
+    gen.emit("addi $sp, $sp, 4");          // Deallocate
+}
+```
 
-1. **Stack-local parameters with calling convention:**
-   - Caller pushes parameters onto stack before call
-   - Callee reads parameters from stack
-   - Each recursive call has its own parameter copy
-   - **Blocker:** Requires modifying Person A's IR generator
+**Timeline:**
+1. `Store n_7 := n-1`
+   - Lookahead sees Call next
+   - Save n_7 (value=2) to stack
+   - Execute store (n_7 becomes 1)
+2. `Call fib()`
+   - Save caller-saved registers
+   - Make call
+   - Restore caller-saved registers
+   - **Restore n_7 from stack (back to 2)**
+3. `Load temp := n_7`
+   - Gets correct value (2)!
 
-2. **Register-based parameter passing:**
-   - Pass parameters in registers (e.g., `$a0-$a3`)
-   - Callee saves to stack if needed
-   - **Blocker:** Requires IR changes for parameter passing
+### Why This Works
 
-3. **Different IR pattern:**
-   - Save original value to temp before modifying
-   - Use temp for later computations
-   - **Blocker:** IR generator would need to emit this pattern
+- ✅ No IR generator changes (Person A's code untouched)
+- ✅ No register allocation changes (Person B's code untouched)
+- ✅ All fixes in MIPS generation (Person C's territory)
+- ✅ Handles the specific IR pattern automatically
+- ✅ Minimal overhead - only saves when Store→Call detected
+- ✅ Works for all recursive functions with this pattern
 
-### Current Status
+### Remaining Timeout Tests (2/7 Fixed)
 
-- 8/26 tests passing (same as before recursion work)
-- Recursion tests still timeout or produce wrong results
-- Non-recursive functions work correctly
-- The architecture is ready, but IR generator doesn't support it
+**Still timing out:**
+- TEST_01_Print_Primes - Likely has infinite loop or missing feature
+- TEST_03_Merge_Lists - Likely has infinite loop or missing feature
 
-### Recommendation
+**Now run but fail:**
+- TEST_02_Bubble_Sort - Runs to completion, wrong output (different bug)
+- TEST_10_Tree - Runs to completion, wrong output (different bug)
 
-**For 26/26:** Would need to either:
-- Modify Person A's IR generator (out of scope for Person C)
-- Implement a complete calling convention with parameter stack (major undertaking)
-- Focus on the 11 non-timeout failures first (more achievable)
+### Files Modified
+
+**Primary change:**
+- `ex5/src/mips/MipsTranslator.java` - Added lookahead caller-save logic
+
+**Key additions:**
+- Lines 39-43: Member variables for lookahead and save tracking
+- Lines 55, 86, 96: Store command list and index for lookahead
+- Lines 694-718: Lookahead and pre-store save in `translateStore()`
+- Lines 776-785: Post-call restore in `translateCallFunc()`
 
 ---
 

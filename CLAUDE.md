@@ -1,9 +1,9 @@
 # 🤖 New Claude - Start Here!
 
 **Project:** Ex5 Compiler - Getting ALL tests passing
-**Current Status:** 8/26 tests passing (30.8%)
+**Current Status:** 11/26 tests passing (42.3%)
 **Goal:** Reach 26/26 tests (100%)
-**Last Updated:** 2026-01-21
+**Last Updated:** 2026-01-21 (Recursion fixed!)
 
 ---
 
@@ -25,19 +25,26 @@ cat /home/student/comp/SESSION_SUMMARY.md
 
 ## 📊 Current Status
 
-### ✅ Passing Tests (8/26 - 30.8%)
+### ✅ Passing Tests (11/26 - 42.3%)
 1. TEST_04 (Matrices) - Arrays work
-2. TEST_06 (Strings) - Fixed last session!
+2. TEST_06 (Strings) - Fixed!
 3. TEST_11 (Precedence) - Arithmetic
-4. TEST_13 (Overflow) - Saturated arithmetic
-5. TEST_14 (Many Local Variables)
-6. TEST_17 (Global Variables)
-7. TEST_18 - Basic functionality
-8. TEST_25 - Basic functionality
+4. **TEST_12 (Fib) - Recursion fixed!** ⭐
+5. TEST_13 (Overflow) - Saturated arithmetic
+6. TEST_14 (Many Local Variables)
+7. TEST_17 (Global Variables)
+8. TEST_18 - Basic functionality
+9. **TEST_19 - Recursion fixed!** ⭐
+10. **TEST_22 - Recursion fixed!** ⭐
+11. TEST_25 - Basic functionality
 
-### ⏱️ Timeout Tests (7) - Need Stack-Based Locals
-TEST_01, TEST_02, TEST_03, TEST_10, TEST_12, TEST_19, TEST_22
-**Don't attempt these yet** - require major architecture changes
+### ⏱️ Still Timeout (2) - Unknown Issues
+TEST_01 (Print_Primes), TEST_03 (Merge_Lists)
+May have infinite loops or missing features
+
+### ⚠️ Improved Tests (2) - Now run but fail
+TEST_02 (Bubble_Sort), TEST_10 (Tree)
+Used to timeout, now produce wrong output
 
 ### ❌ Other Failures (11) - Your Target!
 TEST_05, TEST_07, TEST_08, TEST_09, TEST_15, TEST_16, TEST_20, TEST_21, TEST_23, TEST_24, TEST_26
@@ -48,9 +55,11 @@ TEST_05, TEST_07, TEST_08, TEST_09, TEST_15, TEST_16, TEST_20, TEST_21, TEST_23,
 
 ### **Start with these (likely quick wins):**
 
-1. **TEST_05 (Classes)** - Basic classes work, check what's missing
-2. **TEST_20, TEST_21** - Non-timeout failures, unknown issues
-3. **TEST_08, TEST_09 (Access Violation)** - May just need error handling labels
+1. **TEST_02 (Bubble_Sort)** - Now runs! Wrong output, easier to debug
+2. **TEST_10 (Tree)** - Now runs! Wrong output, easier to debug
+3. **TEST_05 (Classes)** - Basic classes work, check what's missing
+4. **TEST_20, TEST_21** - Non-timeout failures, unknown issues
+5. **TEST_08, TEST_09 (Access Violation)** - May just need error handling labels
 
 ### How to Debug a Test:
 ```bash

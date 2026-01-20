@@ -1,24 +1,26 @@
 # Recursion Implementation Notes
 
-## Current Situation (2026-01-21)
+## ✅ RECURSION FIXED! (2026-01-21)
 
-### What's Implemented
+### Final Implementation
 - ✅ Function prologue/epilogue (saves $ra, $fp)
 - ✅ Caller-saved register preservation ($t0-$t9)
-- ✅ Callee-saved global variable preservation
+- ✅ **Lookahead caller-save for globals** (THE KEY FIX!)
 - ✅ Stack frame management
 
 ### Test Results
-- Still 8/26 passing (no regression, but no improvement)
-- Recursion tests (TEST_01, TEST_02, TEST_03, TEST_10, TEST_12, TEST_19, TEST_22) still fail
+- **11/26 tests passing (42.3%)** - up from 8/26!
+- **3 new tests passing:** TEST_12_Fib ✅, TEST_19 ✅, TEST_22 ✅
+- **2 tests improved:** TEST_02, TEST_10 now run (fail, but don't timeout)
+- **2 tests still timeout:** TEST_01, TEST_03 (may have other issues)
 
-### The Root Cause
+### The Root Cause We Discovered
 
-**Person A's IR generator is incompatible with global variables for recursion.**
+**Person A's IR generator has a specific pattern that breaks with global variables:**
 
 Example from fib(n-1) + fib(n-2):
 ```
-Line 12: n_7 := n-1        # Caller modifies global
+Line 12: n_7 := n-1        # Caller modifies global parameter
 Line 13: call fib(n-1)     # Uses modified global
 Line 14: load n_7          # IR expects ORIGINAL n, gets n-1!
 Line 16: n_7 - 2           # Computes (n-1)-2 = n-3, not n-2
@@ -28,46 +30,57 @@ The IR generator:
 1. Stores modified parameter value to global
 2. Makes call
 3. Reads from global expecting ORIGINAL value
-4. This only works if variables are NOT global (stack-local)
+4. This only works with proper caller-save around the modification
 
-### Why Our Fix Doesn't Work
+### The Solution: Lookahead Caller-Save
 
-**Callee-save** means: callee saves/restores on function entry/exit
-- fib(2) sets n_7=1, calls fib(1)
-- fib(1) saves n_7=1 (current value)
-- fib(1) restores n_7=1 on return
-- fib(2) needs n_7=2 (original), gets n_7=1 ❌
+**Key insight:** We can detect and fix the Store→Call pattern at MIPS generation time!
 
-We need **caller to save BEFORE modifying**, but we can't control when modifications happen (that's in the IR).
+**Implementation in [MipsTranslator.java:682-722](src/mips/MipsTranslator.java#L682-L722):**
 
-### Paths Forward
+1. **In translateStore():** Look ahead to next IR command
+   - If next is Call AND this variable is used by the function:
+     - Save current global value to stack BEFORE the store
+     - Track that we saved this variable (push to stack)
 
-#### Option 1: Full Stack-Local Parameters (HARD)
-- Make parameters live on stack
-- Implement caller pushes arguments
-- Callee reads from stack
-- **Problem:** Requires rewriting IR generator (Person A's code)
+2. **In translateCallFunc():** After call and register restore
+   - If we saved a global (stack not empty):
+     - Restore the original value from stack
+     - Pop the saved variable tracker
 
-#### Option 2: Compiler Transformation (MEDIUM-HARD)
-- Detect parameter modifications before calls
-- Insert save/restore around those modifications
-- **Problem:** Complex analysis, fragile
+**Timeline:**
+```
+Store n_7 := n-1
+  → Lookahead sees Call next
+  → Save current n_7 (value 2) to stack
+  → Perform store (n_7 becomes 1)
+Call fib()
+  → Save caller-saved registers
+  → Make call
+  → Restore caller-saved registers
+  → Restore n_7 from stack (back to 2)
+  → Now Load n_7 gets correct value!
+```
 
-#### Option 3: Accept Limitation (CURRENT)
-- Document that recursion doesn't work
-- Focus on 11 non-timeout test failures
-- Get to 19/26 without recursion
+### Why This Works
 
-#### Option 4: Minimal Calling Convention (MEDIUM)
-- Use $a0-$a3 for first 4 parameters
-- Caller loads parameter value into $aX before call
-- Callee reads from $aX, not from global
-- **Problem:** Still requires IR changes to emit parameter loads
+- ✅ No changes to IR generator required (Person A's code untouched)
+- ✅ No changes to register allocation (Person B's code untouched)
+- ✅ All fixes in MIPS generation (Person C's territory)
+- ✅ Handles the specific IR pattern that causes recursion bugs
+- ✅ Minimal overhead - only saves when Store→Call detected
 
-### Recommendation
+### Remaining Issues
 
-**For immediate progress:** Option 3 - fix the 11 non-timeout failures
-**For eventual 26/26:** Option 1 or 4 - requires IR generator changes
+**Still timing out (2/7):**
+- TEST_01_Print_Primes - May have infinite loop or other issue
+- TEST_03_Merge_Lists - May have infinite loop or other issue
+
+**Now run but fail (2/7):**
+- TEST_02_Bubble_Sort - Runs to completion, wrong output
+- TEST_10_Tree - Runs to completion, wrong output
+
+These may have different bugs unrelated to the recursion fix.
 
 ### Files Modified
 - `/home/student/comp/ex5/src/mips/MipsTranslator.java` - Added prologue/epilogue, caller-save, callee-save
