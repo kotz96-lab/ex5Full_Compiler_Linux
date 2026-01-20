@@ -15,6 +15,11 @@ p_10: .word 0
 main:
     j __user_main    # Jump to main function
 IsPrime:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
 
     # Allocate p_7
     # Allocate p_7
@@ -113,7 +118,7 @@ eq_done_4:
     # Function epilogue
     lw $ra, 4($sp)    # restore return address
     lw $fp, 0($sp)    # restore frame pointer
-    addi $sp, $sp, 0    # deallocate stack frame
+    addi $sp, $sp, 8    # deallocate stack frame
     jr $ra
 
 Label_5_end:
@@ -184,10 +189,22 @@ Label_0_end:
     # Function epilogue
     lw $ra, 4($sp)    # restore return address
     lw $fp, 0($sp)    # restore frame pointer
-    addi $sp, $sp, 0    # deallocate stack frame
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
     jr $ra
 
 PrintPrimes:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
 
     # Allocate end_9
     # Allocate end_9
@@ -335,6 +352,13 @@ saturate_add_done_16:
     j Label_7_start
 
 Label_6_end:
+
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
 
 __user_main:
     # Function prologue

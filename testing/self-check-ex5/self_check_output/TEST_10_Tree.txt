@@ -285,6 +285,13 @@ Label_3_end:
     addi $sp, $sp, 8    # deallocate stack frame
     jr $ra
 
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
 __user_main:
     # Function prologue
     addi $sp, $sp, -8    # allocate stack frame

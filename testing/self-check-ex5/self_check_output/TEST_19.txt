@@ -28,6 +28,13 @@ oof:
     addi $sp, $sp, 8    # deallocate stack frame
     jr $ra
 
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
 foo:
     # Function prologue
     addi $sp, $sp, -8    # allocate stack frame
@@ -64,6 +71,13 @@ foo:
 
     # RETURN Temp_1
     move $v0, $t0    # return value
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+    # Implicit return for void function
     # Function epilogue
     lw $ra, 4($sp)    # restore return address
     lw $fp, 0($sp)    # restore frame pointer

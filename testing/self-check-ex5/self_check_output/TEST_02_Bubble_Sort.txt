@@ -18,6 +18,11 @@ temp_14: .word 0
 main:
     j __user_main    # Jump to main function
 BubbleSort:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
 
     # Allocate size_9
     # Allocate size_9
@@ -291,6 +296,13 @@ saturate_add_done_7:
     j Label_1_start
 
 Label_0_end:
+
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
 
 __user_main:
     # Function prologue

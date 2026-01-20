@@ -22,6 +22,11 @@ C_15: .word 0
 main:
     j __user_main    # Jump to main function
 MergeLists:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
 
     # Allocate l2_9
     # Allocate l2_9
@@ -53,7 +58,7 @@ eq_done_1:
     # Function epilogue
     lw $ra, 4($sp)    # restore return address
     lw $fp, 0($sp)    # restore frame pointer
-    addi $sp, $sp, 0    # deallocate stack frame
+    addi $sp, $sp, 8    # deallocate stack frame
     jr $ra
 
 Label_1_end:
@@ -82,7 +87,7 @@ eq_done_3:
     # Function epilogue
     lw $ra, 4($sp)    # restore return address
     lw $fp, 0($sp)    # restore frame pointer
-    addi $sp, $sp, 0    # deallocate stack frame
+    addi $sp, $sp, 8    # deallocate stack frame
     jr $ra
 
 Label_3_end:
@@ -133,6 +138,10 @@ Label_3_end:
     lw $t0, 4($t0)
 
     # l1_8 := Temp_16
+    # Save l1_8 before store (recursive call ahead)
+    addi $sp, $sp, -4    # allocate space
+    lw $t8, l1_8    # load current value
+    sw $t8, 0($sp)    # save on stack
     sw $t0, l1_8
 
     # Temp_17 := MergeLists()
@@ -161,6 +170,10 @@ Label_3_end:
     lw $t8, 32($sp)
     lw $t9, 36($sp)
     addi $sp, $sp, 40    # deallocate register save area
+    # Restore l1_8 after call (from pre-store save)
+    lw $t8, 0($sp)    # load saved value
+    sw $t8, l1_8    # restore global
+    addi $sp, $sp, 4    # deallocate global save space
 
     # Temp_18 := l3_11
     lw $t0, l3_11
@@ -178,7 +191,7 @@ Label_3_end:
     # Function epilogue
     lw $ra, 4($sp)    # restore return address
     lw $fp, 0($sp)    # restore frame pointer
-    addi $sp, $sp, 0    # deallocate stack frame
+    addi $sp, $sp, 8    # deallocate stack frame
     jr $ra
 
 Label_5_end:
@@ -229,6 +242,10 @@ Label_5_end:
     lw $t0, l1_8
 
     # l1_8 := Temp_28
+    # Save l1_8 before store (recursive call ahead)
+    addi $sp, $sp, -4    # allocate space
+    lw $t8, l1_8    # load current value
+    sw $t8, 0($sp)    # save on stack
     sw $t0, l1_8
 
     # Temp_29 := MergeLists()
@@ -257,6 +274,10 @@ Label_5_end:
     lw $t8, 32($sp)
     lw $t9, 36($sp)
     addi $sp, $sp, 40    # deallocate register save area
+    # Restore l1_8 after call (from pre-store save)
+    lw $t8, 0($sp)    # load saved value
+    sw $t8, l1_8    # restore global
+    addi $sp, $sp, 4    # deallocate global save space
 
     # Temp_30 := l3_11
     lw $t1, l3_11
@@ -274,10 +295,17 @@ Label_5_end:
     # Function epilogue
     lw $ra, 4($sp)    # restore return address
     lw $fp, 0($sp)    # restore frame pointer
-    addi $sp, $sp, 0    # deallocate stack frame
+    addi $sp, $sp, 8    # deallocate stack frame
     jr $ra
 
 Label_7_end:
+
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
 
 __user_main:
     # Function prologue
