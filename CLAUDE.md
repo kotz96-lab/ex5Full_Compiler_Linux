@@ -1,8 +1,8 @@
 # 🤖 New Claude - Start Here!
 
-**Project:** Ex5 Compiler - Getting more tests passing
+**Project:** Ex5 Compiler - Getting ALL tests passing
 **Current Status:** 8/26 tests passing (30.8%)
-**Goal:** Reach 13/26 tests (50%)
+**Goal:** Reach 26/26 tests (100%)
 **Last Updated:** 2026-01-21
 
 ---

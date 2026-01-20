@@ -493,3 +493,76 @@ python3 self-check.py 2>&1 | grep -E "OK$|Total|Passed"
 *Generated after achieving 8/26 tests passing (30.8%)*
 *Session focused on TEST_06 (Strings) - Successfully fixed!*
 *Good luck reaching 13/26! 🚀*
+
+---
+
+## 🔄 Recursion Deep Dive (2026-01-21)
+
+### The Recursion Problem
+
+**Discovery:** Implementing recursion support revealed a fundamental incompatibility between Person A's IR generator and global variable storage.
+
+### What We Tried
+
+1. **Function prologues/epilogues** - Save/restore `$ra` and `$fp` ✅
+2. **Caller-saved register preservation** - Save `$t0-$t9` around calls ✅
+3. **Callee-saved global variables** - Save/restore globals in prologue/epilogue ⚠️
+
+### The Fundamental Issue
+
+**The IR generator modifies global parameter variables before function calls, expecting them to survive:**
+
+```
+IR for fib(n-1) + fib(n-2):
+[ 12] n_7 := n-1          # Modify parameter!
+[ 13] Temp_8 := fib()     # Call fib(n-1)
+[ 14] Temp_10 := n_7      # Load n... expects ORIGINAL n, not n-1!
+[ 16] Temp_9 := n_7 - 2   # Compute n-2... but n_7 is now n-1!
+```
+
+**What happens:**
+- Caller (fib(2)) sets `n_7 = 1` before calling fib(1)
+- Callee (fib(1)) saves `n_7 = 1` in prologue
+- Callee (fib(1)) restores `n_7 = 1` in epilogue
+- Caller expects `n_7 = 2` (original value), but gets `n_7 = 1`!
+
+**Result:** `fib(2)` computes `fib(1) + fib(-1)` instead of `fib(1) + fib(0)`
+
+### Why Callee-Save Doesn't Work
+
+Callee-save preserves the value as it was when the CALLEE entered, not as it was before the CALLER modified it. The caller needs the pre-modification value, which is already lost.
+
+### Proper Solutions (Require IR Changes)
+
+1. **Stack-local parameters with calling convention:**
+   - Caller pushes parameters onto stack before call
+   - Callee reads parameters from stack
+   - Each recursive call has its own parameter copy
+   - **Blocker:** Requires modifying Person A's IR generator
+
+2. **Register-based parameter passing:**
+   - Pass parameters in registers (e.g., `$a0-$a3`)
+   - Callee saves to stack if needed
+   - **Blocker:** Requires IR changes for parameter passing
+
+3. **Different IR pattern:**
+   - Save original value to temp before modifying
+   - Use temp for later computations
+   - **Blocker:** IR generator would need to emit this pattern
+
+### Current Status
+
+- 8/26 tests passing (same as before recursion work)
+- Recursion tests still timeout or produce wrong results
+- Non-recursive functions work correctly
+- The architecture is ready, but IR generator doesn't support it
+
+### Recommendation
+
+**For 26/26:** Would need to either:
+- Modify Person A's IR generator (out of scope for Person C)
+- Implement a complete calling convention with parameter stack (major undertaking)
+- Focus on the 11 non-timeout failures first (more achievable)
+
+---
+

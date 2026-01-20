@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(tar:*)"
+      "Bash(tar:*)",
+      "Bash(python3:*)"
     ]
   }
 }
