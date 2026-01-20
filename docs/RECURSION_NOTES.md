@@ -8,11 +8,15 @@
 - ✅ **Lookahead caller-save for globals** (THE KEY FIX!)
 - ✅ Stack frame management
 
-### Test Results
+### Test Results (Session 1)
 - **11/26 tests passing (42.3%)** - up from 8/26!
 - **3 new tests passing:** TEST_12_Fib ✅, TEST_19 ✅, TEST_22 ✅
 - **2 tests improved:** TEST_02, TEST_10 now run (fail, but don't timeout)
 - **2 tests still timeout:** TEST_01, TEST_03 (may have other issues)
+
+### BREAKTHROUGH UPDATE (Session 2 - 2026-01-21)
+- **13/26 tests passing (50%)** - HALFWAY THERE! 🎉
+- **2 MORE tests passing:** TEST_01_Print_Primes ✅, TEST_02_Bubble_Sort ✅
 
 ### The Root Cause We Discovered
 
@@ -70,20 +74,102 @@ Call fib()
 - ✅ Handles the specific IR pattern that causes recursion bugs
 - ✅ Minimal overhead - only saves when Store→Call detected
 
-### Remaining Issues
+### THE SECOND BUG: Function Label Detection (Session 2)
 
-**Still timing out (2/7):**
-- TEST_01_Print_Primes - May have infinite loop or other issue
-- TEST_03_Merge_Lists - May have infinite loop or other issue
+**Root Cause:**
+Person A's IR generator emits function labels that can start with either:
+- Uppercase: `BubbleSort`, `PrintInt`, etc.
+- Lowercase: `main`, `fib`, etc.
 
-**Now run but fail (2/7):**
-- TEST_02_Bubble_Sort - Runs to completion, wrong output
-- TEST_10_Tree - Runs to completion, wrong output
+Jump labels always start with: `Label_1_start`, `Label_0_end`, etc.
 
-These may have different bugs unrelated to the recursion fix.
+Our original detection used `Character.isLowerCase(labelName.charAt(0))` which:
+- ✅ Correctly identified `main`, `fib`
+- ❌ **MISSED** `BubbleSort`, `PrintInt`, and any function starting with uppercase!
+
+**Impact:**
+- Functions with uppercase names got NO prologue/epilogue
+- When called, they would corrupt the stack (no $ra/$fp save)
+- When they "returned", stack was completely wrong
+- Caused infinite loops, crashes, and wrong outputs
+
+**The Fix:**
+Changed detection from checking first character case to:
+```java
+// OLD (WRONG):
+if (Character.isLowerCase(labelName.charAt(0)))
+
+// NEW (CORRECT):
+if (!labelName.startsWith("Label_"))
+```
+
+This correctly identifies ALL function labels (uppercase or lowercase) and excludes all jump labels.
+
+**Bonus Discovery: Missing ReturnVoid**
+Person A doesn't always generate explicit `ReturnVoid` for void functions!
+- Void functions just end, then next function starts
+- This causes "fall-through" - one function falls into the next
+- Stack gets corrupted because no epilogue/return
+
+**The Fix:**
+When we encounter a new function label while already in a function:
+```java
+if (currentFunction != null) {
+    gen.emitComment("Implicit return for void function");
+    emitFunctionEpilogue();
+    gen.emit("jr $ra");
+}
+```
+
+This adds the missing return between functions automatically.
+
+**Results:**
+- TEST_01_Print_Primes: TIMEOUT → PASS ✅ (was calling PrintInt with no prologue!)
+- TEST_02_Bubble_Sort: FAIL → PASS ✅ (BubbleSort now gets prologue/epilogue!)
+
+### Remaining Issues (13/26 still failing)
+
+**Still timing out (1):**
+- TEST_03_Merge_Lists - May have different issue
+
+**Wrong output (12):**
+- TEST_05, 07, 08, 09, 10, 15, 16, 20, 21, 23, 24, 26
+- These likely have bugs unrelated to function calls/recursion
+
+### Key Insights for Future Sessions
+
+1. **Person A's IR is quirky but fixable at MIPS level:**
+   - Function names can be any case
+   - Void functions may not have explicit ReturnVoid
+   - Store→Call→Load pattern expects value preservation
+   - All fixable in Person C's MIPS generation!
+
+2. **The winning strategy:**
+   - Don't try to fix Person A's IR generator
+   - Don't try to change Person B's register allocation
+   - Work entirely in MipsTranslator.java (Person C's domain)
+   - Use lookahead, implicit returns, and smart detection
+
+3. **What worked:**
+   - Lookahead for Store→Call pattern
+   - Implicit returns between functions
+   - Correct function label detection (!startsWith("Label_"))
+   - Caller-save for all $t registers
+   - Saving/restoring globals around Store→Call
+
+4. **Test categories:**
+   - Recursion tests: FIXED ✅ (3/3 passing: TEST_12, 19, 22)
+   - Function call tests: FIXED ✅ (2/2 passing: TEST_01, 02)
+   - Remaining: Likely arrays, classes, field access, bounds checking
 
 ### Files Modified
-- `/home/student/comp/ex5/src/mips/MipsTranslator.java` - Added prologue/epilogue, caller-save, callee-save
-- All changes are in Person C's territory (MIPS generation)
+- `/home/student/comp/ex5/src/mips/MipsTranslator.java`:
+  - Lines 165-173: Fixed function label detection
+  - Lines 657-664: Added implicit returns for void functions
+  - Lines 694-718: Lookahead caller-save for Store→Call pattern
+  - Lines 749-756: Caller-saved register preservation
+  - Lines 779-785: Global restoration after calls
+- All changes in Person C's territory (MIPS generation)
 - Zero changes to Person A's IR generator (as required)
+- Zero changes to Person B's register allocation (as required)
 
