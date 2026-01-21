@@ -8,13 +8,18 @@
 
 ## 📊 Classification by Problem Type
 
-### 🔴 CATEGORY 1: Method Calls (Class Methods) - **6 tests**
+### 🔴 CATEGORY 1: Method Calls (Class Methods) - **10 tests!** ⚠️ BIGGEST BLOCKER
 **Problem:** Method calls generate `jal <methodName>` but methods aren't emitted as global labels
+
+**⚠️ CRITICAL DISCOVERY:** This blocks MORE tests than originally thought!
 
 **Affected Tests:**
 - **TEST_05** - Classes (birthday, getAverage methods)
 - **TEST_07** - Inheritance (WALK, RUN, SWIM methods)
-- **TEST_16** - Classes (birthday, getAverage methods - same as TEST_05)
+- **TEST_08** - Access Violation (BLOCKED by birthday/getAverage calls first!)
+- **TEST_09** - Access Violation (BLOCKED by birthday/getAverage calls first!)
+- **TEST_15** - Many Data Members (BLOCKED by f.sum() method call!)
+- **TEST_16** - Classes (BLOCKED by birthday/getAverage methods)
 - **TEST_20** - Simple method call (what method)
 - **TEST_21** - Inheritance with method override (go method)
 - **TEST_23** - Multiple inheritance (go, come methods)
@@ -38,17 +43,24 @@ Instruction references undefined symbol at 0x004002a4
 - Or need to emit methods as `ClassName_methodName` labels
 - Inheritance complicates this (override behavior)
 
-**Estimated Impact:** If fixed, +6 tests (46% → 69%)
+**Estimated Impact:** If fixed, +10 tests (50% → **88%**!) 🎯
+- This is THE big unlock!
+- Gets us from 13/26 → 23/26
+- Only 3 tests left after this!
 
 ---
 
-### 🟡 CATEGORY 2: Access Violation Checks - **3 tests**
-**Problem:** Need to detect and report specific access violations
+### 🟡 CATEGORY 2: Access Violation Checks - **0 tests** ❌ FALSE ALARM
+**Problem:** ~~Need to detect and report specific access violations~~ BLOCKED BY CATEGORY 1
+
+**⚠️ UPDATE:** These tests are actually BLOCKED by method calls!
 
 **Affected Tests:**
-- **TEST_08** - Access Violation (array/null pointer check)
-- **TEST_09** - Invalid Pointer Dereference (null pointer check)
-- **TEST_16** - Access Violation (array/null pointer check - same as TEST_08)
+- **TEST_08** - ~~Access Violation~~ → Actually crashes on method calls first
+- **TEST_09** - ~~Invalid Pointer Dereference~~ → Actually crashes on method calls first
+- **TEST_16** - ~~Access Violation~~ → Actually crashes on method calls first
+
+**Status:** NOT a separate category - these will pass once method calls work!
 
 **Expected Outputs:**
 - TEST_08: "Access Violation"
@@ -80,12 +92,12 @@ Invalid Pointer Dereference
 
 ---
 
-### 🟢 CATEGORY 3: Wrong Calculations - **3 tests**
+### 🟢 CATEGORY 3: Wrong Calculations - **2 tests** (was 3, TEST_15 moved to Category 1)
 **Problem:** Code runs but produces wrong numerical results
 
 **Affected Tests:**
 - **TEST_10** - Tree recursion (got 152, expected 1729)
-- **TEST_15** - Many data members (got 4, expected 47)
+- ~~**TEST_15** - Many data members~~ → MOVED TO CATEGORY 1 (blocked by method calls)
 - **TEST_26** - Many parameters (got 81, expected "Register Allocation Failed")
 
 **Symptoms:**
@@ -151,21 +163,18 @@ Invalid Pointer Dereference
 
 ## 🎯 Recommended Attack Strategy
 
-### **QUICK WINS (Start Here):**
+### ⚠️ **REVISED STRATEGY (After Investigation):**
 
-1. **Access Violation Tests (TEST_08, 09, 16)** - 3 tests
-   - Already partially working (detects errors)
-   - Just need to trigger correct error message
-   - Check `RuntimeChecks.java` for bounds vs null checks
-   - **Est. Time:** 30-60 min
-   - **Est. Difficulty:** ⭐⭐ MEDIUM
+The "quick wins" turned out to be **FALSE ALARMS** - they're all blocked by method calls!
 
-2. **TEST_15 (Many Data Members)** - 1 test
-   - Field offset calculation likely wrong
-   - Check how we compute object field offsets
-   - May be off-by-one or wrong stride
-   - **Est. Time:** 30-60 min
-   - **Est. Difficulty:** ⭐⭐ MEDIUM
+**The ONLY path forward:**
+
+1. **FIX METHOD CALLS FIRST** - 10 tests unlocked! (13/26 → 23/26 = 88%)
+   - This is THE big blocker
+   - Everything else depends on this
+   - **Est. Time:** 3-8 hours
+   - **Est. Difficulty:** ⭐⭐⭐⭐ HARD
+   - **Impact:** +10 tests in one go!
 
 ### **MEDIUM EFFORT:**
 
@@ -203,27 +212,35 @@ Invalid Pointer Dereference
 
 ---
 
-## 📈 Impact Analysis
+## 📈 Impact Analysis (REVISED AFTER INVESTIGATION)
 
-### By Effort/Reward Ratio:
+### The Truth About "Quick Wins":
 
-**Best ROI:**
-1. Access Violations (3 tests) - MEDIUM effort, 3 test gain = **+12%**
-2. TEST_15 (1 test) - MEDIUM effort, 1 test gain = **+4%**
+**❌ FALSE ALARMS (all blocked by methods):**
+- ~~Access Violations (3 tests)~~ → Need method calls first
+- ~~TEST_15 (1 test)~~ → Need method calls first
 
-**Subtotal if we fix quick wins: 17/26 (65%)**
+**✅ ACTUAL REMAINING TESTS:**
 
-**Good ROI:**
-3. TEST_10 (1 test) - MEDIUM-HARD effort = **+4%**
-4. TEST_03 (1 test) - MEDIUM-HARD effort = **+4%**
+1. **Method Calls (10 tests!)** - 13/26 → 23/26 = **+38%** 🎯
+   - THE critical path
+   - Unlocks: TEST_05, 07, 08, 09, 15, 16, 20, 21, 23, 24
+   - **Est. Time:** 3-8 hours
 
-**Subtotal if we fix medium: 19/26 (73%)**
+2. **TEST_10 (1 test)** - 23/26 → 24/26 = **+4%**
+   - Tree recursion wrong calculation
+   - **Est. Time:** 1-2 hours
 
-**Major Investment:**
-5. Method Calls (6 tests) - HARD effort = **+23%**
-6. TEST_26 (1 test) - HARD effort = **+4%**
+3. **TEST_03 (1 test)** - 24/26 → 25/26 = **+4%**
+   - List merge timeout
+   - **Est. Time:** 1-2 hours
 
-**Theoretical max: 26/26 (100%)**
+4. **TEST_26 (1 test)** - 25/26 → 26/26 = **+4%**
+   - Should fail register allocation
+   - **Est. Time:** 2-4 hours (involves Person B)
+
+**Path to 100%: Fix method calls → Fix TEST_10/03 → Fix TEST_26**
+**Total est. time: 7-16 hours**
 
 ---
 
@@ -282,21 +299,33 @@ jal methodName    # Generated by us
 
 ---
 
-## 📝 Next Steps
+## 📝 Next Steps (REVISED - Method Calls are THE Path)
 
-**Recommended Order:**
+**⚠️ CRITICAL:** The "quick wins" were illusions - everything needs method calls first!
 
-1. ✅ Fix access violation checks (TEST_08, 09, 16) → **17/26 (65%)**
-2. ✅ Fix TEST_15 field offsets → **18/26 (69%)**
-3. ⚠️ Debug TEST_10 tree recursion → **19/26 (73%)**
-4. ⚠️ Debug TEST_03 list recursion → **20/26 (77%)**
-5. 🔴 Implement method calls (big project) → **26/26 (100%)** or **25/26 (96%)** if TEST_26 unfixable
+**THE PLAN FOR NEXT SESSION:**
 
-**Timeline Estimate:**
-- Quick wins (1-2): ~1-2 hours → 65-69%
-- Medium tasks (3-4): ~2-4 hours → 73-77%
-- Method calls (5): ~3-8 hours → 96-100%
-- **Total to 100%: ~6-14 hours** (depends on method call approach)
+1. 🔴 **Implement Method Calls** → **23/26 (88%)** 🎯
+   - This is THE unlock
+   - +10 tests in one shot
+   - Unlocks: TEST_05, 07, 08, 09, 15, 16, 20, 21, 23, 24
+   - **Est. Time:** 3-8 hours
+   - **Approaches:**
+     - **Simple:** Emit methods as `ClassName_methodName` labels (faster)
+     - **Complex:** Implement vtables for virtual dispatch (proper, harder)
+
+2. ⚠️ **Fix TEST_10/03** → **25/26 (96%)**
+   - After methods work, tackle recursion edge cases
+   - **Est. Time:** 2-4 hours
+
+3. 🔵 **Fix TEST_26** → **26/26 (100%)** ✅
+   - Final boss: should fail register allocation
+   - **Est. Time:** 2-4 hours
+
+**Path to 23/26 (88%):**
+- **Next session goal:** Fix method calls → instant +10 tests!
+- **Total est. time:** 3-8 hours for method calls alone
+- **Remaining after that:** Only 3 tests (TEST_03, 10, 26)
 
 ---
 
