@@ -1045,7 +1045,7 @@ __user_main:
     beq $t0, $zero, error_null_pointer
     lw $t1, 8($t0)
 
-    # Temp_138 := Student_birthday()
+    # Temp_138 := Person_birthday()
     # Save caller-saved registers
     addi $sp, $sp, -40    # allocate space for $t0-$t9
     sw $t0, 0($sp)
@@ -1058,7 +1058,7 @@ __user_main:
     sw $t7, 28($sp)
     sw $t8, 32($sp)
     sw $t9, 36($sp)
-    jal Student_birthday
+    jal Person_birthday
     move $t0, $v0    # save return value
     # Restore caller-saved registers
     lw $t1, 4($sp)
@@ -1136,7 +1136,7 @@ saturate_add_done_14:
     beq $t0, $zero, error_null_pointer
     lw $t0, 8($t0)
 
-    # Temp_148 := Student_birthday()
+    # Temp_148 := Person_birthday()
     # Save caller-saved registers
     addi $sp, $sp, -40    # allocate space for $t0-$t9
     sw $t0, 0($sp)
@@ -1149,7 +1149,7 @@ saturate_add_done_14:
     sw $t7, 28($sp)
     sw $t8, 32($sp)
     sw $t9, 36($sp)
-    jal Student_birthday
+    jal Person_birthday
     move $t1, $v0    # save return value
     # Restore caller-saved registers
     lw $t0, 0($sp)

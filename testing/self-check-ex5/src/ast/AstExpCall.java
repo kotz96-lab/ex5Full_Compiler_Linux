@@ -90,9 +90,8 @@ public class AstExpCall extends AstExp
 			}
 
 			TypeClass classType = (TypeClass) varType;
-			// Cache class name for IR generation
-			cachedClassName = classType.name;
 
+			// Find the method, searching up the inheritance chain
 			Type memberType = classType.find(funcName);
 
 			if (memberType == null)
@@ -106,6 +105,35 @@ public class AstExpCall extends AstExp
 			}
 
 			funcType = (TypeFunction) memberType;
+
+			// Cache the class name WHERE THE METHOD IS ACTUALLY DEFINED (for inheritance)
+			// Search up the inheritance hierarchy to find which class defines this method
+			TypeClass definingClass = classType;
+			boolean foundInCurrent = false;
+			while (definingClass != null)
+			{
+				// Check if this class defines the method
+				for (TypeList it = definingClass.dataMembers; it != null; it = it.tail)
+				{
+					if (it.head != null && funcName.equals(it.head.name))
+					{
+						foundInCurrent = true;
+						break;
+					}
+				}
+				if (foundInCurrent)
+				{
+					cachedClassName = definingClass.name;
+					break;
+				}
+				definingClass = definingClass.father;
+			}
+
+			// Fallback to object's class if not found (shouldn't happen)
+			if (cachedClassName == null)
+			{
+				cachedClassName = classType.name;
+			}
 		}
 		else
 		{

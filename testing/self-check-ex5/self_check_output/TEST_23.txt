@@ -321,7 +321,7 @@ __user_main:
     lw $t9, 36($sp)
     addi $sp, $sp, 40    # deallocate register save area
 
-    # Temp_16 := BigDog_go()
+    # Temp_16 := Dog_go()
     # Save caller-saved registers
     addi $sp, $sp, -40    # allocate space for $t0-$t9
     sw $t0, 0($sp)
@@ -334,7 +334,7 @@ __user_main:
     sw $t7, 28($sp)
     sw $t8, 32($sp)
     sw $t9, 36($sp)
-    jal BigDog_go
+    jal Dog_go
     move $t0, $v0    # save return value
     # Restore caller-saved registers
     lw $t1, 4($sp)

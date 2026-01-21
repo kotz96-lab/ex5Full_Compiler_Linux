@@ -816,7 +816,7 @@ Label_2_end:
     beq $t0, $zero, error_null_pointer
     lw $t0, 8($t0)
 
-    # Temp_99 := Student_birthday()
+    # Temp_99 := Person_birthday()
     # Save caller-saved registers
     addi $sp, $sp, -40    # allocate space for $t0-$t9
     sw $t0, 0($sp)
@@ -829,7 +829,7 @@ Label_2_end:
     sw $t7, 28($sp)
     sw $t8, 32($sp)
     sw $t9, 36($sp)
-    jal Student_birthday
+    jal Person_birthday
     move $t1, $v0    # save return value
     # Restore caller-saved registers
     lw $t0, 0($sp)
@@ -907,7 +907,7 @@ saturate_add_done_20:
     beq $t0, $zero, error_null_pointer
     lw $t0, 8($t0)
 
-    # Temp_109 := Student_birthday()
+    # Temp_109 := Person_birthday()
     # Save caller-saved registers
     addi $sp, $sp, -40    # allocate space for $t0-$t9
     sw $t0, 0($sp)
@@ -920,7 +920,7 @@ saturate_add_done_20:
     sw $t7, 28($sp)
     sw $t8, 32($sp)
     sw $t9, 36($sp)
-    jal Student_birthday
+    jal Person_birthday
     move $t1, $v0    # save return value
     # Restore caller-saved registers
     lw $t0, 0($sp)
