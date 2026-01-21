@@ -2,43 +2,30 @@
 msg_div_zero: .asciiz "Illegal Division By Zero"
 msg_null_ptr: .asciiz "Invalid Pointer Dereference"
 msg_bounds: .asciiz "Access Violation"
+string_1: .asciiz "no"
+string_0: .asciiz "go"
 dog_9: .word 0
+p_10: .word 0
 
 .text
 .globl main
 
 main:
     j __user_main    # Jump to main function
-__user_main:
+Dog_go:
     # Function prologue
     addi $sp, $sp, -8    # allocate stack frame
     sw $ra, 4($sp)    # save return address
     sw $fp, 0($sp)    # save frame pointer
     addi $fp, $sp, 8    # set new frame pointer
 
-    # Allocate dog_9
-    # Allocate dog_9
+    # Temp_0 := "go"
+    la $t0, string_0
 
-    # Temp_0 := NEW_OBJECT("SmallDog", size=20)
-    # Allocate object: SmallDog
-    li $a0, 20
-    li $v0, 9    # malloc
-    syscall
-    move $t0, $v0
-    sw $zero, 0($v0)
-    sw $zero, 4($v0)
-    sw $zero, 8($v0)
-    sw $zero, 12($v0)
-    sw $zero, 16($v0)
+    # p_10 := Temp_0
+    sw $t0, p_10
 
-    # dog_9 := Temp_0
-    # Save dog_9 before store (recursive call ahead)
-    addi $sp, $sp, -4    # allocate space
-    lw $t8, dog_9    # load current value
-    sw $t8, 0($sp)    # save on stack
-    sw $t0, dog_9
-
-    # Temp_1 := go()
+    # Temp_1 := PrintString()
     # Save caller-saved registers
     addi $sp, $sp, -40    # allocate space for $t0-$t9
     sw $t0, 0($sp)
@@ -51,7 +38,175 @@ __user_main:
     sw $t7, 28($sp)
     sw $t8, 32($sp)
     sw $t9, 36($sp)
-    jal go
+    jal PrintString
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Temp_4 := 2
+    li $t0, 2
+
+    # Temp_5 := 666
+    li $t1, 666
+
+    # Temp_3 := Temp_4 + Temp_5
+    # Saturated addition
+    add $t1, $t0, $t1
+    li $t9, 32767
+    bgt $t1, $t9, saturate_add_max_0
+    li $t9, -32768
+    blt $t1, $t9, saturate_add_min_1
+    j saturate_add_done_2
+saturate_add_max_0:
+    li $t1, 32767
+    j saturate_add_done_2
+saturate_add_min_1:
+    li $t1, -32768
+saturate_add_done_2:
+
+    # Temp_6 := 2
+    li $t0, 2
+
+    # Temp_2 := Temp_3 - Temp_6
+    # Saturated subtraction
+    sub $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_sub_max_3
+    li $t9, -32768
+    blt $t0, $t9, saturate_sub_min_4
+    j saturate_sub_done_5
+saturate_sub_max_3:
+    li $t0, 32767
+    j saturate_sub_done_5
+saturate_sub_min_4:
+    li $t0, -32768
+saturate_sub_done_5:
+
+    # RETURN Temp_2
+    move $v0, $t0    # return value
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+SmallDog_go:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Temp_7 := "no"
+    la $t0, string_1
+
+    # p_10 := Temp_7
+    sw $t0, p_10
+
+    # Temp_8 := PrintString()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintString
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Temp_9 := 0
+    li $t0, 0
+
+    # RETURN Temp_9
+    move $v0, $t0    # return value
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+__user_main:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Allocate dog_9
+    # Allocate dog_9
+
+    # Temp_10 := NEW_OBJECT("SmallDog", size=20)
+    # Allocate object: SmallDog
+    li $a0, 20
+    li $v0, 9    # malloc
+    syscall
+    move $t0, $v0
+    sw $zero, 0($v0)
+    sw $zero, 4($v0)
+    sw $zero, 8($v0)
+    sw $zero, 12($v0)
+    sw $zero, 16($v0)
+
+    # dog_9 := Temp_10
+    # Save dog_9 before store (recursive call ahead)
+    addi $sp, $sp, -4    # allocate space
+    lw $t8, dog_9    # load current value
+    sw $t8, 0($sp)    # save on stack
+    sw $t0, dog_9
+
+    # Temp_11 := SmallDog_go()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal SmallDog_go
     move $t0, $v0    # save return value
     # Restore caller-saved registers
     lw $t1, 4($sp)

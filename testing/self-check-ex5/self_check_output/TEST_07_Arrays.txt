@@ -2,16 +2,401 @@
 msg_div_zero: .asciiz "Illegal Division By Zero"
 msg_null_ptr: .asciiz "Invalid Pointer Dereference"
 msg_bounds: .asciiz "Access Violation"
+string_1: .asciiz "GrandfatherRUN"
+string_2: .asciiz "GrandfatherSWIM"
+string_5: .asciiz "FatherRUN"
+string_6: .asciiz "SonRUN"
+string_0: .asciiz "GrandfatherWALK"
+string_3: .asciiz "FatherSWIM"
+string_7: .asciiz "SonWALK"
+string_4: .asciiz "FatherPAINT"
 A_12: .word 0
 g1_13: .word 0
 g2_14: .word 0
 i_11: .word 0
+p_10: .word 0
 
 .text
 .globl main
 
 main:
     j __user_main    # Jump to main function
+Grandfather_WALK:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Temp_0 := "GrandfatherWALK"
+    la $t0, string_0
+
+    # p_10 := Temp_0
+    sw $t0, p_10
+
+    # Temp_1 := PrintString()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintString
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+Grandfather_RUN:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Temp_2 := "GrandfatherRUN"
+    la $t0, string_1
+
+    # p_10 := Temp_2
+    sw $t0, p_10
+
+    # Temp_3 := PrintString()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintString
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+Grandfather_SWIM:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Temp_4 := "GrandfatherSWIM"
+    la $t0, string_2
+
+    # p_10 := Temp_4
+    sw $t0, p_10
+
+    # Temp_5 := PrintString()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintString
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+Father_SWIM:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Temp_6 := "FatherSWIM"
+    la $t0, string_3
+
+    # p_10 := Temp_6
+    sw $t0, p_10
+
+    # Temp_7 := PrintString()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintString
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+Father_PAINT:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Temp_8 := "FatherPAINT"
+    la $t0, string_4
+
+    # p_10 := Temp_8
+    sw $t0, p_10
+
+    # Temp_9 := PrintString()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintString
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+Father_RUN:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Temp_10 := "FatherRUN"
+    la $t0, string_5
+
+    # p_10 := Temp_10
+    sw $t0, p_10
+
+    # Temp_11 := PrintString()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintString
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+Son_RUN:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Temp_12 := "SonRUN"
+    la $t0, string_6
+
+    # p_10 := Temp_12
+    sw $t0, p_10
+
+    # Temp_13 := PrintString()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintString
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+Son_WALK:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Temp_14 := "SonWALK"
+    la $t0, string_7
+
+    # p_10 := Temp_14
+    sw $t0, p_10
+
+    # Temp_15 := PrintString()
+    # Save caller-saved registers
+    addi $sp, $sp, -40    # allocate space for $t0-$t9
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    sw $t2, 8($sp)
+    sw $t3, 12($sp)
+    sw $t4, 16($sp)
+    sw $t5, 20($sp)
+    sw $t6, 24($sp)
+    sw $t7, 28($sp)
+    sw $t8, 32($sp)
+    sw $t9, 36($sp)
+    jal PrintString
+    move $t0, $v0    # save return value
+    # Restore caller-saved registers
+    lw $t1, 4($sp)
+    lw $t2, 8($sp)
+    lw $t3, 12($sp)
+    lw $t4, 16($sp)
+    lw $t5, 20($sp)
+    lw $t6, 24($sp)
+    lw $t7, 28($sp)
+    lw $t8, 32($sp)
+    lw $t9, 36($sp)
+    addi $sp, $sp, 40    # deallocate register save area
+
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
 __user_main:
     # Function prologue
     addi $sp, $sp, -8    # allocate stack frame
@@ -22,19 +407,19 @@ __user_main:
     # Allocate i_11
     # Allocate i_11
 
-    # Temp_0 := 0
+    # Temp_16 := 0
     li $t0, 0
 
-    # i_11 := Temp_0
+    # i_11 := Temp_16
     sw $t0, i_11
 
     # Allocate A_12
     # Allocate A_12
 
-    # Temp_2 := 27
+    # Temp_18 := 27
     li $t0, 27
 
-    # Temp_1 := NEW_ARRAY(int[Temp_2], elemSize=4)
+    # Temp_17 := NEW_ARRAY(int[Temp_18], elemSize=4)
     # Allocate array
     li $s0, 4
     mul $s0, $t0, $s0    # size * elemSize
@@ -44,29 +429,29 @@ __user_main:
     sw $t0, 0($v0)    # store length
     move $t0, $v0
 
-    # A_12 := Temp_1
+    # A_12 := Temp_17
     sw $t0, A_12
 
 Label_1_start:
 
-    # Temp_4 := i_11
+    # Temp_20 := i_11
     lw $t0, i_11
 
-    # Temp_5 := 27
+    # Temp_21 := 27
     li $t1, 27
 
-    # Temp_3 := Temp_4 < Temp_5
+    # Temp_19 := Temp_20 < Temp_21
     slt $t0, $t0, $t1
 
-    # JumpIfEqToZero Temp_3 Label_0_end
+    # JumpIfEqToZero Temp_19 Label_0_end
     beq $t0, $zero, Label_0_end
 
-    # Temp_6 := NEW_OBJECT("Father", size=24)
+    # Temp_22 := NEW_OBJECT("Father", size=24)
     # Allocate object: Father
     li $a0, 24
     li $v0, 9    # malloc
     syscall
-    move $t0, $v0
+    move $t1, $v0
     sw $zero, 0($v0)
     sw $zero, 4($v0)
     sw $zero, 8($v0)
@@ -74,30 +459,30 @@ Label_1_start:
     sw $zero, 16($v0)
     sw $zero, 20($v0)
 
-    # Temp_7 := A_12
-    lw $t1, A_12
+    # Temp_23 := A_12
+    lw $t0, A_12
 
-    # Temp_8 := i_11
+    # Temp_24 := i_11
     lw $t2, i_11
 
-    # ARRAY_STORE(Temp_7[Temp_8], Temp_6, elemSize=4)
+    # ARRAY_STORE(Temp_23[Temp_24], Temp_22, elemSize=4)
     # Check array bounds
-    beq $t1, $zero, error_null_pointer
+    beq $t0, $zero, error_null_pointer
     bltz $t2, error_bounds
-    lw $s0, 0($t1)    # load array length
+    lw $s0, 0($t0)    # load array length
     bge $t2, $s0, error_bounds
     sll $s0, $t2, 2
     addi $s0, $s0, 4
-    add $s0, $t1, $s0
-    sw $t0, 0($s0)
+    add $s0, $t0, $s0
+    sw $t1, 0($s0)
 
-    # Temp_10 := i_11
+    # Temp_26 := i_11
     lw $t1, i_11
 
-    # Temp_11 := 1
+    # Temp_27 := 1
     li $t0, 1
 
-    # Temp_9 := Temp_10 + Temp_11
+    # Temp_25 := Temp_26 + Temp_27
     # Saturated addition
     add $t0, $t1, $t0
     li $t9, 32767
@@ -112,7 +497,7 @@ saturate_add_min_1:
     li $t0, -32768
 saturate_add_done_2:
 
-    # i_11 := Temp_9
+    # i_11 := Temp_25
     sw $t0, i_11
 
     # Jump Label_1_start
@@ -120,32 +505,32 @@ saturate_add_done_2:
 
 Label_0_end:
 
-    # Temp_12 := 0
+    # Temp_28 := 0
     li $t0, 0
 
-    # i_11 := Temp_12
+    # i_11 := Temp_28
     sw $t0, i_11
 
 Label_3_start:
 
-    # Temp_14 := i_11
+    # Temp_30 := i_11
     lw $t0, i_11
 
-    # Temp_15 := 11
+    # Temp_31 := 11
     li $t1, 11
 
-    # Temp_13 := Temp_14 < Temp_15
+    # Temp_29 := Temp_30 < Temp_31
     slt $t0, $t0, $t1
 
-    # JumpIfEqToZero Temp_13 Label_2_end
+    # JumpIfEqToZero Temp_29 Label_2_end
     beq $t0, $zero, Label_2_end
 
-    # Temp_16 := NEW_OBJECT("Son", size=32)
+    # Temp_32 := NEW_OBJECT("Son", size=32)
     # Allocate object: Son
     li $a0, 32
     li $v0, 9    # malloc
     syscall
-    move $t2, $v0
+    move $t1, $v0
     sw $zero, 0($v0)
     sw $zero, 4($v0)
     sw $zero, 8($v0)
@@ -155,30 +540,30 @@ Label_3_start:
     sw $zero, 24($v0)
     sw $zero, 28($v0)
 
-    # Temp_17 := A_12
-    lw $t0, A_12
+    # Temp_33 := A_12
+    lw $t2, A_12
 
-    # Temp_18 := i_11
-    lw $t1, i_11
-
-    # ARRAY_STORE(Temp_17[Temp_18], Temp_16, elemSize=4)
-    # Check array bounds
-    beq $t0, $zero, error_null_pointer
-    bltz $t1, error_bounds
-    lw $s0, 0($t0)    # load array length
-    bge $t1, $s0, error_bounds
-    sll $s0, $t1, 2
-    addi $s0, $s0, 4
-    add $s0, $t0, $s0
-    sw $t2, 0($s0)
-
-    # Temp_20 := i_11
+    # Temp_34 := i_11
     lw $t0, i_11
 
-    # Temp_21 := 1
+    # ARRAY_STORE(Temp_33[Temp_34], Temp_32, elemSize=4)
+    # Check array bounds
+    beq $t2, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t2)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2
+    addi $s0, $s0, 4
+    add $s0, $t2, $s0
+    sw $t1, 0($s0)
+
+    # Temp_36 := i_11
+    lw $t0, i_11
+
+    # Temp_37 := 1
     li $t1, 1
 
-    # Temp_19 := Temp_20 + Temp_21
+    # Temp_35 := Temp_36 + Temp_37
     # Saturated addition
     add $t0, $t0, $t1
     li $t9, 32767
@@ -193,7 +578,7 @@ saturate_add_min_4:
     li $t0, -32768
 saturate_add_done_5:
 
-    # i_11 := Temp_19
+    # i_11 := Temp_35
     sw $t0, i_11
 
     # Jump Label_3_start
@@ -204,36 +589,36 @@ Label_2_end:
     # Allocate g1_13
     # Allocate g1_13
 
-    # Temp_22 := A_12
-    lw $t0, A_12
+    # Temp_38 := A_12
+    lw $t1, A_12
 
-    # Temp_23 := 3
-    li $t1, 3
+    # Temp_39 := 3
+    li $t0, 3
 
-    # Temp_24 := ARRAY_ACCESS(Temp_22[Temp_23], elemSize=4)
+    # Temp_40 := ARRAY_ACCESS(Temp_38[Temp_39], elemSize=4)
     # Check array bounds
-    beq $t0, $zero, error_null_pointer
-    bltz $t1, error_bounds
-    lw $s0, 0($t0)    # load array length
-    bge $t1, $s0, error_bounds
-    sll $s0, $t1, 2    # index * 4
+    beq $t1, $zero, error_null_pointer
+    bltz $t0, error_bounds
+    lw $s0, 0($t1)    # load array length
+    bge $t0, $s0, error_bounds
+    sll $s0, $t0, 2    # index * 4
     addi $s0, $s0, 4    # + 4 (skip length)
-    add $s0, $t0, $s0
+    add $s0, $t1, $s0
     lw $t0, 0($s0)
 
-    # g1_13 := Temp_24
+    # g1_13 := Temp_40
     sw $t0, g1_13
 
     # Allocate g2_14
     # Allocate g2_14
 
-    # Temp_25 := A_12
+    # Temp_41 := A_12
     lw $t0, A_12
 
-    # Temp_26 := 20
+    # Temp_42 := 20
     li $t1, 20
 
-    # Temp_27 := ARRAY_ACCESS(Temp_25[Temp_26], elemSize=4)
+    # Temp_43 := ARRAY_ACCESS(Temp_41[Temp_42], elemSize=4)
     # Check array bounds
     beq $t0, $zero, error_null_pointer
     bltz $t1, error_bounds
@@ -244,14 +629,14 @@ Label_2_end:
     add $s0, $t0, $s0
     lw $t0, 0($s0)
 
-    # g2_14 := Temp_27
+    # g2_14 := Temp_43
     # Save g2_14 before store (recursive call ahead)
     addi $sp, $sp, -4    # allocate space
     lw $t8, g2_14    # load current value
     sw $t8, 0($sp)    # save on stack
     sw $t0, g2_14
 
-    # Temp_28 := WALK()
+    # Temp_44 := Grandfather_WALK()
     # Save caller-saved registers
     addi $sp, $sp, -40    # allocate space for $t0-$t9
     sw $t0, 0($sp)
@@ -264,7 +649,7 @@ Label_2_end:
     sw $t7, 28($sp)
     sw $t8, 32($sp)
     sw $t9, 36($sp)
-    jal WALK
+    jal Grandfather_WALK
     move $t0, $v0    # save return value
     # Restore caller-saved registers
     lw $t1, 4($sp)
@@ -282,7 +667,7 @@ Label_2_end:
     sw $t8, g2_14    # restore global
     addi $sp, $sp, 4    # deallocate global save space
 
-    # Temp_29 := SWIM()
+    # Temp_45 := Grandfather_SWIM()
     # Save caller-saved registers
     addi $sp, $sp, -40    # allocate space for $t0-$t9
     sw $t0, 0($sp)
@@ -295,7 +680,7 @@ Label_2_end:
     sw $t7, 28($sp)
     sw $t8, 32($sp)
     sw $t9, 36($sp)
-    jal SWIM
+    jal Grandfather_SWIM
     move $t0, $v0    # save return value
     # Restore caller-saved registers
     lw $t1, 4($sp)

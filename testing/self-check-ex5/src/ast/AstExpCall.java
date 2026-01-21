@@ -14,6 +14,7 @@ public class AstExpCall extends AstExp
 	public String funcName;
 	public AstExpList params;
     public AstVar var;
+    private String cachedClassName = null;  // Cache class name for method calls
 
 	/******************/
 	/* CONSTRUCTOR(S) */
@@ -82,25 +83,28 @@ public class AstExpCall extends AstExp
 		{
 			// Method call: var.funcName(...)
 			Type varType = var.semantMe();
-			
+
 			if (!varType.isClass())
 			{
 				throw new SemanticException(line, String.format("method call on non-class type %s", varType.name));
 			}
-			
+
 			TypeClass classType = (TypeClass) varType;
+			// Cache class name for IR generation
+			cachedClassName = classType.name;
+
 			Type memberType = classType.find(funcName);
-			
+
 			if (memberType == null)
 			{
 				throw new SemanticException(line, String.format("method %s not found in class %s", funcName, classType.name));
 			}
-			
+
 			if (!(memberType instanceof TypeFunction))
 			{
 				throw new SemanticException(line, String.format("%s is not a method", funcName));
 			}
-			
+
 			funcType = (TypeFunction) memberType;
 		}
 		else
@@ -190,11 +194,15 @@ public class AstExpCall extends AstExp
     {
         // First, we need to find the function to get parameter names
         TypeFunction funcType = null;
+        String callName = funcName;  // Will be modified for method calls
         try {
             if (var != null) {
-                Type varType = var.semantMe();
-                TypeClass classType = (TypeClass) varType;
-                funcType = (TypeFunction) classType.find(funcName);
+                // For method calls, use cached class name (can't call semantMe again)
+                if (cachedClassName != null) {
+                    callName = cachedClassName + "_" + funcName;
+                }
+                // Try to find funcType in symbol table (may not work during IR phase)
+                funcType = (TypeFunction) symboltable.SymbolTable.getInstance().find(funcName);
             } else {
                 funcType = (TypeFunction) symboltable.SymbolTable.getInstance().find(funcName);
             }
@@ -220,9 +228,9 @@ public class AstExpCall extends AstExp
             }
         }
 
-        // Call the function
+        // Call the function (with prefixed name for methods)
         Temp resultTemp = temp.TempFactory.getInstance().getFreshTemp();
-        Ir.getInstance().AddIrCommand(new IrCommandCallFunc(funcName, resultTemp));
+        Ir.getInstance().AddIrCommand(new IrCommandCallFunc(callName, resultTemp));
 
         return resultTemp;
     }

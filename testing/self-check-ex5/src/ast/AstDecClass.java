@@ -1,5 +1,6 @@
 package ast;
 
+import temp.Temp;
 import types.*;
 import symboltable.*;
 
@@ -130,5 +131,35 @@ public class AstDecClass extends AstDec
 		int count = 0;
 		for (TypeList it = list; it != null; it = it.tail) count++;
 		return count;
+	}
+
+	/**
+	 * Generate IR for class methods
+	 * Called during IR generation phase to emit method code
+	 */
+	public Temp irMe()
+	{
+		// Iterate through all data members and generate IR for methods
+		AstTypeNameList it = dataMembers;
+		while (it != null)
+		{
+			if (it.head != null && it.head.funcDec != null)
+			{
+				// This is a method - need to prefix with class name to avoid collisions
+				// Save original name
+				String originalName = it.head.funcDec.name;
+
+				// Temporarily change name to ClassName_methodName
+				it.head.funcDec.name = name + "_" + originalName;
+
+				// Generate IR with prefixed name
+				it.head.funcDec.irMe();
+
+				// Restore original name
+				it.head.funcDec.name = originalName;
+			}
+			it = it.tail;
+		}
+		return null;
 	}
 }

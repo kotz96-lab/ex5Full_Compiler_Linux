@@ -174,14 +174,14 @@ public class MipsTranslator
 
         for (IrCommand cmd : commands) {
             // Track which function we're in
-            // Only consider it a function if it's NOT a jump label (which start with uppercase)
+            // Only consider it a function if it's NOT a jump label (which start with "Label_")
             if (cmd instanceof IrCommandLabel) {
                 IrCommandLabel labelCmd = (IrCommandLabel) cmd;
                 String labelName = labelCmd.labelName;
 
-                // Function labels are lowercase (main, fib, etc.)
-                // Jump labels start with uppercase (Label_1_end, etc.)
-                if (!labelName.isEmpty() && Character.isLowerCase(labelName.charAt(0))) {
+                // Function labels: main, fib, BubbleSort, etc.
+                // Jump labels: Label_1_end, Label_0_start, etc. (start with "Label_")
+                if (!labelName.isEmpty() && !labelName.startsWith("Label_")) {
                     currentFunc = labelName;
                     if (!functionLocals.containsKey(currentFunc)) {
                         functionLocals.put(currentFunc, new HashMap<>());
@@ -743,6 +743,15 @@ public class MipsTranslator
         boolean isFunctionEntry = functionLocals.containsKey(cmd.labelName);
 
         if (isFunctionEntry) {
+            // If we're already in a function, emit an implicit return (epilogue + jr $ra)
+            // This handles void functions without explicit return statements
+            if (currentFunction != null) {
+                gen.emitComment("Implicit return for void function");
+                emitFunctionEpilogue();
+                gen.emit("jr $ra");
+                gen.emitBlankLine();
+            }
+
             // Update current function context
             currentFunction = cmd.labelName;
 

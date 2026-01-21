@@ -4,6 +4,8 @@ msg_null_ptr: .asciiz "Invalid Pointer Dereference"
 msg_bounds: .asciiz "Access Violation"
 f_9: .word 0
 p_10: .word 0
+i17_24: .word 0
+i30_37: .word 0
 
 .text
 .globl main
@@ -35,6 +37,49 @@ sum:
     addi $sp, $sp, 8    # deallocate stack frame
     jr $ra
 
+foo_sum:
+    # Function prologue
+    addi $sp, $sp, -8    # allocate stack frame
+    sw $ra, 4($sp)    # save return address
+    sw $fp, 0($sp)    # save frame pointer
+    addi $fp, $sp, 8    # set new frame pointer
+
+    # Temp_2 := i17_24
+    lw $t1, i17_24
+
+    # Temp_3 := i30_37
+    lw $t0, i30_37
+
+    # Temp_1 := Temp_2 + Temp_3
+    # Saturated addition
+    add $t0, $t1, $t0
+    li $t9, 32767
+    bgt $t0, $t9, saturate_add_max_0
+    li $t9, -32768
+    blt $t0, $t9, saturate_add_min_1
+    j saturate_add_done_2
+saturate_add_max_0:
+    li $t0, 32767
+    j saturate_add_done_2
+saturate_add_min_1:
+    li $t0, -32768
+saturate_add_done_2:
+
+    # RETURN Temp_1
+    move $v0, $t0    # return value
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
+    # Implicit return for void function
+    # Function epilogue
+    lw $ra, 4($sp)    # restore return address
+    lw $fp, 0($sp)    # restore frame pointer
+    addi $sp, $sp, 8    # deallocate stack frame
+    jr $ra
+
 __user_main:
     # Function prologue
     addi $sp, $sp, -8    # allocate stack frame
@@ -45,7 +90,7 @@ __user_main:
     # Allocate f_9
     # Allocate f_9
 
-    # Temp_1 := NEW_OBJECT("foo", size=132)
+    # Temp_4 := NEW_OBJECT("foo", size=132)
     # Allocate object: foo
     li $a0, 132
     li $v0, 9    # malloc
@@ -85,14 +130,14 @@ __user_main:
     sw $zero, 124($v0)
     sw $zero, 128($v0)
 
-    # f_9 := Temp_1
+    # f_9 := Temp_4
     # Save f_9 before store (recursive call ahead)
     addi $sp, $sp, -4    # allocate space
     lw $t8, f_9    # load current value
     sw $t8, 0($sp)    # save on stack
     sw $t0, f_9
 
-    # Temp_2 := sum()
+    # Temp_5 := foo_sum()
     # Save caller-saved registers
     addi $sp, $sp, -40    # allocate space for $t0-$t9
     sw $t0, 0($sp)
@@ -105,7 +150,7 @@ __user_main:
     sw $t7, 28($sp)
     sw $t8, 32($sp)
     sw $t9, 36($sp)
-    jal sum
+    jal foo_sum
     move $t0, $v0    # save return value
     # Restore caller-saved registers
     lw $t1, 4($sp)
@@ -123,10 +168,10 @@ __user_main:
     sw $t8, f_9    # restore global
     addi $sp, $sp, 4    # deallocate global save space
 
-    # p_10 := Temp_2
+    # p_10 := Temp_5
     sw $t0, p_10
 
-    # Temp_3 := PrintInt()
+    # Temp_6 := PrintInt()
     # Save caller-saved registers
     addi $sp, $sp, -40    # allocate space for $t0-$t9
     sw $t0, 0($sp)
