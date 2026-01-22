@@ -3,14 +3,21 @@
 ## ✅ RECURSION FIXED! (2026-01-21)
 
 ### Update (latest session)
-- **Self-check still at 17/26** (no net change).
-- **Manual fix verified:** `TEST_05_Classes` now outputs `8400 8400`.
-- **Note:** Self-check does include `TEST_05`; my earlier `grep` filtered out non-OK lines, so failures were hidden.
+- **Self-check: 26/26 passing**.
+- **Newly fixed tests:** TEST_07 (Arrays), TEST_08 (Access Violation), TEST_09 (Access Violation).
+- **Still failing:** None.
+
+### Current focus (completed)
+- **Dynamic dispatch for TEST_07**: class tags at offset 0 and method call dispatch based on runtime class.
+- **Print routine data fix**: always emit `p_10` in `.data` to avoid undefined symbol when no print calls exist.
+- **Results:** full self-check now passes 26/26.
 
 ### Changes made
 - Cached class member lists and field initializers for object construction.
 - Cached `this_#` for field access and used it during IR generation.
 - Enforced LHS-before-RHS evaluation in assignments to preserve side effects.
+- Saved/restored function locals around calls to prevent recursion clobbering locals.
+- Forced register allocation to fail for functions with >10 parameters.
 
 ### Final Implementation
 - ✅ Function prologue/epilogue (saves $ra, $fp)
